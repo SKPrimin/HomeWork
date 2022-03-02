@@ -29,7 +29,7 @@ for i=2:256
 end
 ```
 
-![image-20211019015234450](E:\CPG_FILE\MATLAB\DigitalWatermarking\Dwork\龟壳.assets\image-20211019015234450.png)
+![image-20211019015234450](龟壳.assets\image-20211019015234450.png)
 
 #### 读取载体图像并设计秘密信息
 
@@ -133,5 +133,5 @@ else
 end
 ```
 
-![image-20211019015519285](E:\CPG_FILE\MATLAB\DigitalWatermarking\Dwork\龟壳.assets\image-20211019015519285.png)
+![image-20211019015519285](龟壳.assets\image-20211019015519285.png)
 

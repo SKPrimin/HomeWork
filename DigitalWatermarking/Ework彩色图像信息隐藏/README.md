@@ -15,7 +15,7 @@ cr=coverYUV(:,:,3);
 subplot(412),imshow(coverYUV),title('YUV图像')
 ```
 
-![image-20211103112739198](E:\CPG_FILE\MATLAB\DigitalWatermarking\Ework\README.assets\image-20211103112739198.png)
+![image-20211103112739198](README.assets\image-20211103112739198.png)
 
 #### 2设计水印信息。
 
@@ -45,7 +45,7 @@ fivewatermark=fivewatermark';
 fivewatermark=str2num(fivewatermark(:));%二层信息转成五进制保存
 ```
 
-![image-20211103191731324](E:\CPG_FILE\MATLAB\DigitalWatermarking\Ework\README.assets\image-20211103191731324.png)
+![image-20211103191731324](README.assets\image-20211103191731324.png)
 
 #### 3将Cb域数据分割成8×8的块，一块嵌入1个bit秘密信息，将秘密信息嵌入到载体图像Cb域中。
 
@@ -114,7 +114,7 @@ stegoi1=ycbcr2rgb(stegoi1);
 subplot(425),imshow(stegoi1),title('嵌入第一层水印后的载密图像')
 ```
 
-![image-20211103121929696](E:\CPG_FILE\MATLAB\DigitalWatermarking\Ework\README.assets\image-20211103121929696.png)
+![image-20211103121929696](README.assets\image-20211103121929696.png)
 
 #### 6使用EMD算法在嵌入第一重秘密信息的载体图像RGB域嵌入第二重秘密信息。
 
@@ -166,7 +166,7 @@ stegoi2(:,:,3)=EMD_em(B,fivewatermark,mag);
 subplot(426),imshow(stegoi2),title('嵌入第二层水印后的图像');
 ```
 
-![image-20211103122624859](E:\CPG_FILE\MATLAB\DigitalWatermarking\Ework\README.assets\image-20211103122624859.png)
+![image-20211103122624859](README.assets\image-20211103122624859.png)
 
 #### 7提取秘密信息。
 
@@ -243,5 +243,5 @@ subplot(427),imshow(uint8(dec_exdata1));
 title('提取到的第一层水印图像');
 ```
 
-![image-20211103191511865](E:\CPG_FILE\MATLAB\DigitalWatermarking\Ework\README.assets\image-20211103191511865.png)
+![image-20211103191511865](README.assets\image-20211103191511865.png)
 

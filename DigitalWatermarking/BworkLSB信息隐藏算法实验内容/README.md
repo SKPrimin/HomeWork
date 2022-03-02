@@ -9,7 +9,7 @@
 
 1. 载体图片
 
-![](E:\CPG_FILE\MATLAB\DigitalWatermarking\Bwork\7.bmp)
+![](7.bmp)
 
 2. 相关代码
 
@@ -38,7 +38,7 @@
 
 3. 八位平面展示
 
-![](E:\CPG_FILE\MATLAB\DigitalWatermarking\Bwork\01watch.bmp)
+![](01watch.bmp)
 
 #### 制作水印图片，嵌入1个位平面、嵌入2个位平面、嵌入3个位平面
 
@@ -157,15 +157,15 @@
 3. 加水印的效果图
 
    - 嵌入1个位平面
-   <img src="E:\CPG_FILE\MATLAB\DigitalWatermarking\Bwork\02ins1.bmp" style="zoom:80%;" /><img src="E:\CPG_FILE\MATLAB\DigitalWatermarking\Bwork\02ins18.bmp" style="zoom:80%;" />
+   <img src="02ins1.bmp" style="zoom:80%;" /><img src="02ins18.bmp" style="zoom:80%;" />
    
 
    - 嵌入2个位平面
-   <img src="E:\CPG_FILE\MATLAB\DigitalWatermarking\Bwork\02ins2.bmp" style="zoom:80%;" /><img src="E:\CPG_FILE\MATLAB\DigitalWatermarking\Bwork\02ins28.bmp" style="zoom:80%;" />
+   <img src="02ins2.bmp" style="zoom:80%;" /><img src="02ins28.bmp" style="zoom:80%;" />
    
 
    - 嵌入3个位平面
-<img src="E:\CPG_FILE\MATLAB\DigitalWatermarking\Bwork\02ins3.bmp" style="zoom:80%;" /><img src="E:\CPG_FILE\MATLAB\DigitalWatermarking\Bwork\02ins38.bmp" style="zoom:80%;" />
+<img src="02ins3.bmp" style="zoom:80%;" /><img src="02ins38.bmp" style="zoom:80%;" />
 
 
 
@@ -203,17 +203,17 @@ figure;imshow(uint8(newimgW)),title('提取出的图片')
 
 - 从嵌入1个位平面图中提取图片
 
-<img src="E:\CPG_FILE\MATLAB\DigitalWatermarking\Bwork\02ins1out.bmp"  />
+<img src="02ins1out.bmp"  />
 
 - 从嵌入2个位平面图中提取图片
 
-<img src="E:\CPG_FILE\MATLAB\DigitalWatermarking\Bwork\02ins2out.bmp"  />
+<img src="02ins2out.bmp"  />
 
 - 从嵌入3个位平面图中提取图片
 
 
 
-<img src="E:\CPG_FILE\MATLAB\DigitalWatermarking\Bwork\02ins3out.bmp"  />
+<img src="02ins3out.bmp"  />
 
 ### 小结讨论
 
