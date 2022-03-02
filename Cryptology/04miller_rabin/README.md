@@ -205,7 +205,7 @@ if __name__ == '__main__':
 
 ##### 运行截图
 
-![image-20211206170044490](Miller_Rabin.assets/image-20211206170136449.png
+![image-20211206170044490](Miller_Rabin.assets/image-20211206170136449.png)
 
 
 
