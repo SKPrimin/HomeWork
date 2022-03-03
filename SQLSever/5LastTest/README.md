@@ -49,8 +49,6 @@ FOREIGN KEY(SNO) REFERENCES S168(SNO),
 
 ```
 
-![](D:/Program Files/Typora/media/image1.png){width="2.1041666666666665in" height="1.7708333333333333in"}
-
 1.  **导入数据，插入自己的数据**
 
 数据库中实例数据见表5-表8，在EXCEL文档 "CGS.Xls" 中用四个同名的SHEET给出，请用"导入数据"功能将数据导入到相应基本表中。
@@ -314,7 +312,7 @@ WHERE GNO IN(
 
 可以看到"茶几"的数量调整为原先的2倍
 
-![image-20220303083951312](LastTest/image-20220303083951312.png)![image-20220303083956500](LastTest/image-20220303083956500.png)
+<img src="LastTest/image-20220303083951312.png" alt="image-20220303083951312" style="zoom:80%;" /><img src="LastTest/image-20220303083956500.png" alt="image-20220303083956500" style="zoom:80%;" />
 
 10) 建立一个从事计算机行业的客户购买\"茶几\"的视图CGS_CSCJ，通过视图查询显示结果。
 
