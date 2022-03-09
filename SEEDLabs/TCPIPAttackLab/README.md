@@ -2,7 +2,7 @@
 
 ## 任务1：SYN洪泛攻击
 
-[本任务作者博客]: https://blog.csdn.net/lanpesk
+本任务(任务1、2)作者博客: https://blog.csdn.net/lanpesk
 
 
 在客户端与服务器建立TCP时，首先要进入一个SYN与应答的阶段。这里是我们经常说的三次握手建立连接。具体的内容请自行了解，这里不再赘述。
