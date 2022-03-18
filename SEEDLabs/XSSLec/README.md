@@ -57,7 +57,7 @@ Live HTTP Headers记录浏览器和互联网之间的所有HTTP流量，可以�
 - 查看使用的HTTP请求方式
 - 查看响应码
 
-​                 ![img](lec11/6cpI1MrrwLyxdnpM4y3utQ.pngw=1280&h=629.2549842602309)        
+​                 ![img](lec11/6cpI1MrrwLyxdnpM4y3utQ.png)        
 
 ### Firedug
 

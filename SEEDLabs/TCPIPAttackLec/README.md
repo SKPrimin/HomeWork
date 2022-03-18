@@ -4,7 +4,7 @@
 
 #### ARP cache poisoning
 
-参考文档：[arp-spoofing](https://www.imperva.com/learn/application-security/arp-spoofing/)：https://www.imperva.com/learn/application-security/arp-spoofing/
+参考文档：[arp-spoofing](https://www.imperva.com/learn/application-security/arp-spoofing/)
 
 地址解析协议 (ARP) 是一种使网络通信能够到达网络上特定设备的协议。ARP 将 Internet 协议 (IP) 地址转换为媒体访问控制 (MAC) 地址，反之亦然。
 
@@ -12,7 +12,7 @@
 
 一台不可信赖的计算机会发出假冒的ARP查询或应答信息，并将所有流向它的数据流转移。这样，它就可以伪装成某台机器，或修改数据流。这种攻击叫做ARP欺骗攻击。
 
-![img](lec10/ARP_Spoofing.svg)
+![img](lec10/ARP_Spoofing.png)
 
 ARP 欺骗是一种中间人(MitM)攻击，允许攻击者拦截网络设备之间的通信。攻击的工作原理如下：
 
@@ -26,7 +26,7 @@ ARP 欺骗是一种中间人(MitM)攻击，允许攻击者拦截网络设备之�
 
 #### ICMP Redirect Attack
 
-[what-icmp-redirect-message]: https://www.ibm.com/support/pages/what-icmp-redirect-message
+参考文档：[what-icmp-redirect-message](https://www.ibm.com/support/pages/what-icmp-redirect-message)
 
 ICMP 重定向是 IP 的一项“功能”，它允许路由器通知主机有一条更有效的到达目的地的路由，并且主机应该相应地调整其路由表。这在受信任的 LAN 上可能没问题，但在狂野的 Internet 上，随别人的心血来潮改变您的路由表可能不是一个好主意。可能被恶意用于将流量重定向到特定系统的攻击。如果黑客想让被攻击主机修改其路由表，黑客伪装成路由器，向主机发送 Internet 控制消息协议 (ICMP) 重定向消息，让主机根据黑客的要求修改路由表，所有未来的流量都必须定向到特定系统。
 
@@ -34,8 +34,9 @@ ICMP 重定向是 IP 的一项“功能”，它允许路由器通知主机有�
 
 #### SYN Flooding Attack
 
-[syn-flood-ddos-attac]: https://www.cloudflare.com/en-gb/learning/ddos/syn-flood-ddos-attack/
-[syn-flood]: https://www.imperva.com/learn/ddos/syn-flood/
+[syn-flood-ddos-attac](https://www.cloudflare.com/en-gb/learning/ddos/syn-flood-ddos-attack/)
+
+[syn-flood](https://www.imperva.com/learn/ddos/syn-flood/)
 
 SYN Flood Attack是一种拒绝服务 (DDoS) 攻击，旨在通过消耗所有可用的服务器资源使服务器对合法流量不可用。通过重复发送初始连接请求 (SYN) 数据包，攻击者能够淹没目标服务器计算机上的所有可用端口，导致目标设备对合法流量的响应缓慢或根本不响应。
 
@@ -62,7 +63,7 @@ TCP SYN 洪水（又名 SYN 洪水）是一种 分布式拒绝服务 ( DDoS ) �
 
 #### TCP Session Hijacking
 
-[network-or-tcp-session-hijacking]: https://www.greycampus.com/opencampus/ethical-hacking/network-or-tcp-session-hijacking
+[network-or-tcp-session-hijacking](https://www.greycampus.com/opencampus/ethical-hacking/network-or-tcp-session-hijacking)
 
 TCP 会话劫持是对受保护网络上的用户会话的安全攻击，因为身份验证通常只在 TCP 会话开始时进行，所以有可乘之机。
 
@@ -92,8 +93,7 @@ http://www.cis.syr.edu/~wedu/seed/Documentation/Misc/netwox.pdf
 
 [PDF: netwox](netwox.pdf)
 
-[netwox-doc]: https://web.ecs.syr.edu/~wedu/Teaching/cis758/netw522/netwox-doc_html/html/examples.html
-[netwox]: http://www.vulnerabilityassessment.co.uk/netwox.htm
+[netwox-doc](https://web.ecs.syr.edu/~wedu/Teaching/cis758/netw522/netwox-doc_html/html/examples.html)、[netwox](http://www.vulnerabilityassessment.co.uk/netwox.htm)
 
 ### 通用工具
 
