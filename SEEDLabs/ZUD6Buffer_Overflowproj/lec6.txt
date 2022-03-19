@@ -1,0 +1,37 @@
+1、阅读Basic Integer Overflows 这篇文章，大概描述整数溢出的原因和危害。
+http://www.phrack.org/issues.html?issue=60&id=10#article
+
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <signal.h>
+#include <setjmp.h>
+
+void catcher(int a)
+{
+       setresuid(geteuid(),geteuid(),geteuid());
+       printf("WIN!\n");
+       system("/bin/sh");
+       exit(0);
+}
+
+int main(int argc, char **argv)
+{
+       if (argc != 3 || !atoi(argv[2]))
+               return 1;
+       signal(SIGFPE, catcher);
+       return atoi(argv[1]) / atoi(argv[2]);
+}
+
+上面这段代码如何才能执行到system("/bin/sh")处？
+
+2、阅读堆溢出的文章Once upon a free()... 
+http://www.phrack.org/issues.html?issue=57&id=9#article。比较堆溢出和栈溢出的异同。
+
+3、阅读后解释一下什么是Stack Frame
+https://www.cnblogs.com/33debug/p/6773059.html
+https://www.cnblogs.com/qinfengxiaoyue/p/3523166.html
+https://www.jianshu.com/p/b666213cdd8a
+
+4、（一定要做）上网搜索利用jmp esp或者call esp来进行栈溢出的文章并且仔细阅读，解释这种技术的优点。
+

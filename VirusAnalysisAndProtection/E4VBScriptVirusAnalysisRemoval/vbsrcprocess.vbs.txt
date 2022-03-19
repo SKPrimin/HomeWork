@@ -1,0 +1,5 @@
+Set objWMIService = GetObject("winmgmts:")
+Set colScheduledJobs = objWMIService.ExecQuery("select * from win32_process where name = 'wscript.exe'")
+For Each objJob in colScheduledJobs
+    Wscript.Echo "Name: " & objJob.Name & VBNewLine
+Next

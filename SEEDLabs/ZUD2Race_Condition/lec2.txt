@@ -1,0 +1,19 @@
+1、linux下用open函数打开文件时，要是采用O_WRONLY模式为何容易产生竞争条件漏洞？
+换成O_WRONLY | O_CREAT | O_EXCL 模式后情况会如何？
+
+2、（不需要完全搞懂全部流程）阅读一篇文章“从一个漏洞谈到ptrace的漏洞发现及利用方法”，地址为http://www.nsfocus.net/index.php?act=magazine&do=view&mid=1795。描述其中的竞争条件漏洞出现的原因。
+
+3、（选做）上网搜索CVE-2016-5195漏洞的相关资料。描述其中的整数溢出和竞争条件漏洞
+出现的原因。
+
+4、echo "crack:"$(openssl passwd -1 -salt a3g1 123456)":0:0:,,,:/root:/bin/bash"的输出
+结果是什么？root用户把输出的这一行加入/etc/passwd末尾会产生什么效果？（提前备份该文件，之后恢复）
+
+5、解释Big Endian 和 Little Endian 模式，以及两者的区别。
+
+6、认真观看
+P7 Race Condition Vulnerability Lecture
+
+Software Security - Kevin Du - SEED Project - Syracuse University
+https://www.bilibili.com/video/BV1v4411S7mv
+大概说下视频的内容。

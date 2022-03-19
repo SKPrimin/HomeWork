@@ -1,0 +1,21 @@
+
+1、解释gcc参数-fno-stack-protector的含义，gcc的参数里面与stack overflow相关的还有哪些？
+
+2、（一定要看）非常仔细地阅读Smashing The Stack For Fun And Profit. 
+http://www.cs.wright.edu/people/faculty/tkprasad/courses/cs781/alephOne.html
+
+3、阅读下面两篇文章的同时，熟悉一下gdb基本操作，看汇编设断点查看内存之类的基本操作了解一点。
+http://seanmurphree.com/blog/?p=157
+
+https://tomasuh.github.io/2015/01/19/IO-Wargame.html
+Level 3部分
+
+4、认真观看，一共3部分
+缓冲区溢出漏洞实验详解 Kevin Du
+https://www.bilibili.com/video/av26297464
+
+大概说下视频的内容。
+
+5、详细解释一下什么是ASLR，以及Linux和Windows下实现有什么区别。
+
+

@@ -1,0 +1,17 @@
+1、网上搜索并且阅读Four different tricks to bypass StackShield and StackGuard protection这篇文章，描述这些现有保护机制的弱点。
+
+
+2、阅读下面这篇文章：
+Bypassing non-executable-stack during exploitation using return-to-libc. 
+http://www.infosecwriters.com/text_resources/pdf/return-to-libc.pdf
+
+
+3、阅读这个链接的第3章，解释怎样构造 return2libc 的访问链 http://www.phrack.org/issues.html?issue=58&id=4 
+
+4、阅读这个链接
+https://bbs.pediy.com/thread-224643.htm
+
+
+5、认真观看，P4 Return-to-libc Attack Lecture
+https://www.bilibili.com/video/BV1v4411S7mv
+大概说下视频的内容。

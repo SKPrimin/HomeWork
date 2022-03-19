@@ -1,0 +1,42 @@
+' 创建文件对象,文件操作前都要创建文件对象
+Set fso = CreateObject("Scripting.FileSystemObject")
+
+'打开当前脚本 WScript.ScriptFullname当前运行脚本的路径
+Const ForReading = 1, ForWriting = 2
+Set file = fso.OpenTextFile(WScript.ScriptFullname,ForReading)
+
+' 以文本形式读取file整个文件
+ReadAllTextFile = file.ReadAll 
+MsgBox(ReadAllTextFile)
+file.Close
+
+' 备份文件
+Set MyFile = fso.GetFile(WScript.ScriptFullname)
+newfileName = "MSKernel32.vbs"
+MyFile.Copy(newfileName)	
+
+
+' 获取指定文件夹的路径	1 获取System文件夹路径，0 windows文件夹，2 temp文件夹
+Const WinFolder = 1
+Set tfolder = fso.GetSpecialFolder(WinFolder)
+
+' 获得文件夹句柄 ，'folderspec为文件夹路径
+Set fjubing = fso.GetFolder(tfolder)
+
+' 创建文件，f1.path&".txt"为路径及文件名
+Set MySFL = fso.CreateTextFile("C:\VBStest.txt")
+
+' 子文件夹
+Set sf = fjubing.SubFolders
+For Each f1 in sf
+' 取文件后缀
+  GetAnExtension = fso.GetExtensionName(f1)
+  s = ""
+  s = s & f1 
+  s = s & " filename:"
+  s = s & f1.name 
+  ' 写入子文件夹文件名
+  MySFL.WriteLine(s)
+Next
+MySFL.Close
+

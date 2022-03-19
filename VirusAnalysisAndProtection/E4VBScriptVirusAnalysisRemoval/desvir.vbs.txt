@@ -1,0 +1,67 @@
+'On Error Resume Next
+Dim fso,dirsystem,file,vbscopy,folder
+Set fso = CreateObject("Scripting.FileSystemObject")	'创建文件对象
+Set file = fso.OpenTextFile(WScript.ScriptFullname,1)
+Set folder = fso.GetFile(WScript.ScriptFullname).ParentFolder
+main()
+
+Sub main()
+	'开始调用几个功能模块
+	regdele()	'删除注册表
+	msgbox(folder.path)
+
+	folderlist(folder.path) ' 删除文件夹内的一众病毒
+	
+	Set dirsystem = fso.GetSpecialFolder(1)	'获取System目录
+	fso.DeleteFile(dirsystem&"\MSKernel32.vbs")	'删除在System目录备份的病毒
+	
+	MsgBox("game over") '显示病毒被清除
+	stoprocess '结束进程
+End Sub
+
+
+Sub regdele()	'在注册表中创建自启动项
+	'On Error Resume Next
+	Set regedit = CreateObject("WScript.Shell")
+	regkey = "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Run\MSKernel32"
+	regedit.RegDelete regkey
+End Sub
+
+
+
+'指定文件夹
+Sub deinfectfiles(folderspec)	'执行删除病毒文件
+	Set f = fso.GetFolder(folderspec)
+	For Each item in f.Files
+	'指定删除的文件类型
+		ext = LCase(fso.GetExtensionName(item.path)) '小写的后缀
+		If (item.attributes = 2) Then	 '不再隐藏
+			item.attributes = 0
+		End If
+		If ext = "vbs" Then
+			'MsgBox item.name
+			s = s & item.Name & VBNewLine
+			fso.DeleteFile(item.path)
+		End If
+	Next
+Wscript.Echo s & "Has Been Shutdown" & VBNewLine
+End Sub
+
+Sub folderlist(folderspec)	'遍历文件夹
+	On Error Resume Next
+	Dim f,f1,sf
+	Set f = fso.GetFolder(folderspec)
+	Set sf = f.SubFolders
+	For each f1 in sf
+		deinfectfiles(f1.path)	'清除目录中的文件
+		folderlist(f1.path)	'递归，继续搜索子目录
+	Next
+End Sub
+
+Sub stoprocess
+Set objWMIService = GetObject("winmgmts:")
+Set colScheduledJobs = objWMIService.ExecQuery("select * from win32_process where name = 'wscript.exe'")
+for Each processor in colScheduledJobs
+	processor.terminate
+Next
+End Sub

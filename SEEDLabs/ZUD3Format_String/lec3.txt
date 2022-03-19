@@ -1,0 +1,25 @@
+1.
+main()
+{
+ int num=0x41414141;
+
+ printf("Before: num = %#x \n", num);
+ printf("%.20d%hn\n", num, &num);
+ printf("After: num = %#x \n", num);
+
+}
+查看这段代码的执行结果，解释%.20d和%hn的含义。
+
+2.解释linux用root执行下面这条命令
+sysctl -w kernel.randomize_va_space=0
+
+的含义和用途。
+
+3.描述fprintf、printf、sprintf、snprintf、vprintf这几个函数的功能和差异。
+
+4、认真观看
+P8 Format String Vulnerability Lecture
+Software Security - Kevin Du - SEED Project - Syracuse University
+
+https://www.bilibili.com/video/BV1v4411S7mv
+大概说下视频的内容。
