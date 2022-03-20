@@ -6,17 +6,17 @@
 
 参与作者：z周周、wm
 
-## 1、用IE访问某些网站的时候，输入javascript:alert(document.cookie)会有什么反应，
+#### 1、用IE访问某些网站的时候，输入javascript:alert(document.cookie)会有什么反应，
 
 解释原因。
 
-​                 ![img](../Cross-SiteScripting(XSS)AttackLec/XSSAttack/hMq6pbr2N2jxzkOR2phKjg.png)        
+​                 ![img](XSSAttack/hMq6pbr2N2jxzkOR2phKjg.png)        
 
 `document.cookie`可以获取本网页的`cookie`值，`alert()`方法显示一个带有消息和OK按钮的警告框。
 
 `javascript:alert(document.cookie)`是一段脚本，可以让浏览器以警告框的形式弹出本页面的cookie值。
 
-## 2、阅读下面两篇文章或者阅读一本书\<\<JavaScript DOM编程艺术>\>：
+#### 2、阅读下面两篇文章或者阅读一本书\<\<JavaScript DOM编程艺术>\>：
 
 ### Javascript Tutorial
 
@@ -28,13 +28,13 @@
 
 先新建一个文本文档，把文章中的代码复制进.txt文件中，再将文件后缀名更改为.html，再次点击文件就可直接跳转到浏览器中。
 
-​                 ![img](../Cross-SiteScripting(XSS)AttackLec/XSSAttack/JzeeVNMzbx3Oozzw_0zwYw.png)        
+​                 ![img](XSSAttack/JzeeVNMzbx3Oozzw_0zwYw.png)        
 
 还有点击文本内容改变文本颜色和位置等。
 
-​                 ![img](../Cross-SiteScripting(XSS)AttackLec/XSSAttack/RD1kAylwWTW2IeDhE5mimw.png)        
+​                 ![img](XSSAttack/RD1kAylwWTW2IeDhE5mimw.png)        
 
-​                 ![img](../Cross-SiteScripting(XSS)AttackLec/XSSAttack/SjJmVarPMB5MitsCwRGAXg.png)        
+​                 ![img](XSSAttack/SjJmVarPMB5MitsCwRGAXg.png)        
 
 ### XMLHttpRequest
 
@@ -46,9 +46,9 @@ Ajax是**可以在不刷新页面时更新网页、在页面加载后从服务�
 
 这一篇文章看不到了。
 
-## 3、了解FireFox的两个插件LiveHttpHeaders和Firebug的基本使用方法。
+#### 3、了解FireFox的两个插件LiveHttpHeaders和Firebug的基本使用方法。
 
-### Live HTTP Headers
+##### Live HTTP Headers
 
 Live HTTP Headers记录浏览器和互联网之间的所有HTTP流量，可以用来：
 
@@ -61,15 +61,15 @@ Live HTTP Headers记录浏览器和互联网之间的所有HTTP流量，可以�
 - 查看使用的HTTP请求方式
 - 查看响应码
 
-​                 ![img](../Cross-SiteScripting(XSS)AttackLec/XSSAttack/6cpI1MrrwLyxdnpM4y3utQ.png)        
+​                 ![img](XSSAttack/6cpI1MrrwLyxdnpM4y3utQ.png)        
 
-### Firedug
+##### Firedug
 
 Firebug是一个开源的Firefox网页浏览器扩展，是一个网页开发工具，可以利用它调试、编辑、删改任何网站的CSS、HTML、DOM与JavaScript代码，现在已经停止开发，并且前去搜索会指引你下载Firefox Developer Edition。
 
 好在Google还保留了Firebug Lite端口。Firebug Lite提供了丰富的视觉表示，当涉及到HTML元素，DOM元素和框模型阴影时，我们用于在Firebug中看到。 它还提供了一些很酷的功能，如用鼠标检查HTML元素，以及Live编辑CSS属性。
 
-​                 ![img](../Cross-SiteScripting(XSS)AttackLec/XSSAttack/qVkRL_yNb-jGVJ2lWANXHg.pngw=1280&h=632.6282722513089)        
+​                 ![img](XSSAttack/qVkRL_yNb-jGVJ2lWANXHg.pngw=1280&h=632.6282722513089)        
 
 4、阅读下面这篇文章：
 
@@ -79,9 +79,9 @@ Firebug是一个开源的Firefox网页浏览器扩展，是一个网页开发工
 
 网页显示权限不足。
 
-## 5、阅读下面这几篇文章：
+#### 5、阅读下面这几篇文章：
 
-### DOM Based Cross Site Scripting or XSS of the Third Kind
+##### DOM Based Cross Site Scripting or XSS of the Third Kind
 
 <http://www.webappsec.org/projects/articles/071105.html>
 
@@ -94,7 +94,7 @@ DOM型XSS主要是由客户端的脚本通过DOM动态地输出数据到页面�
 1. 避免客户端文档重写、重定向或其他敏感操作，同时避免使用客户端数据，这些操作大多数都可以通过使用动态页面（服务器端）来实现；
 2. 分析和强化客户端JS代码，特别是可能受到用户（攻击者）影响的DOM对象。
 
-### XSS (Cross Site Scripting) Cheat Sheet Esp: for filter evasion
+##### XSS (Cross Site Scripting) Cheat Sheet Esp: for filter evasion
 
 <http://80x86.io/post/xsscrosssitescriptingcheatsheetespforfilterevasion>网页打不开。通过搜索找到另一网址：<https://n0p.net/penguicon/php_app_sec/mirror/xss.html>
 
@@ -116,11 +116,11 @@ DOM型XSS主要是由客户端的脚本通过DOM动态地输出数据到页面�
 
 令有钓鱼地址构造到ifeng.com的子域名里，为了过QQ邮箱不可信域名拦截以及各类安全软件的拦截，去借助ifeng.com白域名去跳转到真正的钓鱼页面。
 
-## 6、XSS漏洞的触发条件有哪些？应该如何防范？
+#### 6、XSS漏洞的触发条件有哪些？应该如何防范？
 
-### **触发条件：**
+**触发条件：**
 
-#### **1.脚本插入**
+##### **1.脚本插入**
 
 **(1)插入javascript和vbscript正常字符。**
 
@@ -154,7 +154,7 @@ DOM型XSS主要是由客户端的脚本通过DOM动态地输出数据到页面�
 例4：<IMG SRC="jav ascript:alert('XSS')"> '/ 是换行符的16进制形式
 ```
 
-#### **2.样式表**
+##### **2.样式表**
 
 **(1)利用CSS代码@import、expression触发XSS漏洞。**
 
@@ -194,7 +194,7 @@ DOM型XSS主要是由客户端的脚本通过DOM动态地输出数据到页面�
 例2：@\i\0m\00p\000o\0000\00000r\000000t”url”;
 ```
 
-### **防范方法：**
+##### **防范方法：**
 
 防御XSS攻击主要有两种方法，一种是设法过滤掉数据中的代码或把代码转换成数据，一种是强制开发者把代码和数据分开，再对代码部分添加约束条件。
 
@@ -206,7 +206,7 @@ DOM型XSS主要是由客户端的脚本通过DOM动态地输出数据到页面�
 
 （2）对于第二种方法，关键在于将代码和数据分离开来，并设置相应规则来禁止执行来自不可信源的JavaScript代码。这可以通过内容安全策略机制(CSP)来实现。CSP是为了有效地防御XSS攻击而开发的一套机制，设置相应的CSP规则可有效地禁止恶意代码的运行，提高程序对XSS攻击的抵抗力。
 
-## 7、认真观看，P3 Cross-Site Scripting Attack Lecture
+#### 7、认真观看，P3 Cross-Site Scripting Attack Lecture
 
 https://www.bilibili.com/video/BV1a441117kb
 
@@ -224,7 +224,7 @@ SQL Injection：就是通过把SQL命令插入到Web表单递交或输入域名�
 
 
 
-
+# Lab
 
 ## 简介
 
