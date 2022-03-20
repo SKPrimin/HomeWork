@@ -6,7 +6,7 @@
 
 解释原因。
 
-​                 ![img](lec11/hMq6pbr2N2jxzkOR2phKjg.png)        
+​                 ![img](XSSAttack/hMq6pbr2N2jxzkOR2phKjg.png)        
 
 `document.cookie`可以获取本网页的`cookie`值，`alert()`方法显示一个带有消息和OK按钮的警告框。
 
@@ -24,13 +24,13 @@
 
 先新建一个文本文档，把文章中的代码复制进.txt文件中，再将文件后缀名更改为.html，再次点击文件就可直接跳转到浏览器中。
 
-​                 ![img](lec11/JzeeVNMzbx3Oozzw_0zwYw.png)        
+​                 ![img](XSSAttack/JzeeVNMzbx3Oozzw_0zwYw.png)        
 
 还有点击文本内容改变文本颜色和位置等。
 
-​                 ![img](lec11/RD1kAylwWTW2IeDhE5mimw.png)        
+​                 ![img](XSSAttack/RD1kAylwWTW2IeDhE5mimw.png)        
 
-​                 ![img](lec11/SjJmVarPMB5MitsCwRGAXg.png)        
+​                 ![img](XSSAttack/SjJmVarPMB5MitsCwRGAXg.png)        
 
 ### XMLHttpRequest
 
@@ -57,7 +57,7 @@ Live HTTP Headers记录浏览器和互联网之间的所有HTTP流量，可以�
 - 查看使用的HTTP请求方式
 - 查看响应码
 
-​                 ![img](lec11/6cpI1MrrwLyxdnpM4y3utQ.png)        
+​                 ![img](XSSAttack/6cpI1MrrwLyxdnpM4y3utQ.png)        
 
 ### Firedug
 
@@ -65,7 +65,7 @@ Firebug是一个开源的Firefox网页浏览器扩展，是一个网页开发工
 
 好在Google还保留了Firebug Lite端口。Firebug Lite提供了丰富的视觉表示，当涉及到HTML元素，DOM元素和框模型阴影时，我们用于在Firebug中看到。 它还提供了一些很酷的功能，如用鼠标检查HTML元素，以及Live编辑CSS属性。
 
-​                 ![img](lec11/qVkRL_yNb-jGVJ2lWANXHg.pngw=1280&h=632.6282722513089)        
+​                 ![img](XSSAttack/qVkRL_yNb-jGVJ2lWANXHg.pngw=1280&h=632.6282722513089)        
 
 4、阅读下面这篇文章：
 
