@@ -9,7 +9,7 @@ int bof(FILE *badfile)
     char buffer[12];
 
     /* The following statement has a buffer overflow problem */
-    fread(buffer, sizeof(char), 40, badfile);
+    fread(buffer, sizeof(char), 400, badfile);
 
     return 1;
 }
