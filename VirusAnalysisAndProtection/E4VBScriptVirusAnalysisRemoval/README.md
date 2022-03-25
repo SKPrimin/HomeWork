@@ -252,15 +252,31 @@ Next
 
 ### Filemon
 
-![image-20220319103409534](VBScriptVAR/image-20220319103409534.png)
+过滤设为，注意不要把**system**过滤了
+
+```bash
+ctfmon.exe; TPAutoconnect.exe; Lsass.exe; FileMon.exe; Regmon.exe; tcpview.exe; procexp.exe; vmtoolsd.exe;
+```
+
+可以检测到，病毒分别在系统盘和子文件夹内写入，并且对此文件夹内原有的文件设置了属性。
+
+![image-20220324213233126](VBScriptVAR/image-20220324213233126.png)
 
 ### Regmon
 
+在此发现，脚本发出了大量Create和setValue请求。
+
 ![image-20220319103440701](VBScriptVAR/image-20220319103440701.png)
 
-### Process Explorer ![image-20220319103119551](VBScriptVAR/image-20220319103119551.png) 
+### Process Explorer 
+
+程序运行之后发现新增了一个进程。把这个进程关闭之后，弹窗就消失了。
+
+### ![image-20220319103119551](VBScriptVAR/image-20220319103119551.png) 
 
 ###  IceWord 
+
+此处监测到启动组部分新增了一个开机启动项，名称为MSKernel32，路径正是病毒复制到系统盘的路径。
 
 ![](VBScriptVAR/image-20220319103218549.png)
 
@@ -467,10 +483,14 @@ End Sub
 
 File Monitor显示script进程发出了五个DELETE请求，位置恰好与此前新建的相对应，以及恢复。这里也侧面说明此前的病毒没有删除原有文件。
 
-![image-20220319133620634](VBScriptVAR/image-20220319133620634.png)
+![image-20220324214413426](VBScriptVAR/image-20220324214413426.png)
+
+此时查看文件夹也发现病毒已被删除，原有文件也恢复显示状态了
+
+![image-20220324214918832](VBScriptVAR/image-20220324214918832.png)
 
 
-注册表的开机自启删除了，进程也结束了，弹窗自然也消失了
+注册表的开机自启删除了，进程也结束了，弹窗自然也消失了。
 
 ![image-20220319124553072](VBScriptVAR/image-20220319124553072.png)
 

