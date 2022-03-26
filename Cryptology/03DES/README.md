@@ -734,7 +734,7 @@ public class FileRW {
 
 ### Python实现
 
-这里python实现感谢lg @youyouwoxi.csdn
+这里python由[对酒当歌](https://blog.csdn.net/youyouwoxi)实现 
 
 ```python
 # IP置换表
