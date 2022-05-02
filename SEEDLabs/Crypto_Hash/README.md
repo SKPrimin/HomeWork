@@ -1,4 +1,4 @@
-# Crypto One-Way Hash Function and MAC 单向哈希函数和MAC
+#   Crypto One-Way Hash Function and MAC 单向哈希函数和MAC
 
 
 
@@ -244,6 +244,8 @@ print("Same digits in SHA256 hashes are:", sha2num,
 >
 > 我们在任意平台上运行python，由于一般来讲主机运行速度显著快于虚拟机，在主机上运行脚本
 
+### one-way
+
 > 1、需要多少次试验才能打破单向性属性？你应该重复你的实验多次，并报告你的平均试验次数。
 
 抗原像性（单向特性）。这衡量了设计一条散列到已知摘要的消息的难度，粗略地说，哈希函数必须是单向的。
@@ -276,9 +278,101 @@ print("average:", sumTrials/times)
 
 ```
 
-![image-20220430192021555](One-WayHashFunctionandMAC/image-20220430192021555.png)
+![image-20220502202945890](One-WayHashFunctionandMAC/image-20220502202945890.png)
 
-平均值15151314
+平均值104693255
+
+C语言版本
+
+注意此C语言版本仅仅能在Windows上进行了测试，所需的openssl建议大家使用[vcpkg](https://github.com/microsoft/vcpkg)下载，vcpkg的安装和使用方法见：
+
+https://github.com/microsoft/vcpkg/blob/master/README_zh_CN.md
+
+https://blog.csdn.net/cjmqas/article/details/79282847?spm=1001.2014.3001.5506
+
+`vcpkg install openssl:x86-windows`开始下载安装openssl
+
+```c
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <string.h>
+#include <openssl/evp.h>
+#include <time.h>
+
+//生成随机字符串用到的字符
+char strdict[] = "0123456789qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM!\"#$ % &'()*+, -./:;<=>?@[\\]^_`{|}~";
+
+//生成随机字符串的函数
+void generateString(unsigned char* gen_str, const unsigned int len)
+{
+    int dictlen = strlen(strdict);
+    for (int i = 0; i < len; i++)
+    {
+        int randnumm = rand() % dictlen;
+        gen_str[i] = strdict[randnumm];
+    }
+}
+
+int main(int argc, char* argv[])
+{
+
+    EVP_MD_CTX* mdctx;
+    const EVP_MD* md;
+    argv[2] = "e59ff9";//根据需要自己编一个哈希值（24位，6个十六进制数）
+    char *hash_value0 = argv[2];
+    char hash_value1[7] = "0"; //因为字符串末尾还需要一个\0作为结束标志，所以长度为7
+    unsigned char md_value[EVP_MAX_MD_SIZE];
+    unsigned int md_len, count;
+    float average = 0;
+    const unsigned int len = 12;//生成的随机字符串的长度
+    argv[1] = "md5";//使用md5算法
+    unsigned char str[len+1] = { "0" }; //len+1原因同上
+    srand((unsigned int)time(NULL));    //设置随机数种子
+    for (int i = 0; i < 5; i++) //5次破解
+    {
+        char hash_value1[7] = "0";
+        count = 0;  //尝试次数
+        while (strcmp(hash_value0, hash_value1))
+        {
+            generateString(str, len);
+            //printf("random str:%s\n", str);
+            if (argv[1] == NULL) {
+                printf("Usage: mdtest digestname\n");
+                exit(1);
+            }
+
+            md = EVP_get_digestbyname(argv[1]);
+            if (md == NULL) {
+                printf("Unknown message digest %s\n", argv[1]);
+                exit(1);
+            }
+            //计算哈希值
+            mdctx = EVP_MD_CTX_new();
+            EVP_DigestInit_ex2(mdctx, md, NULL);
+            EVP_DigestUpdate(mdctx, str, strlen((const char*)str));
+            EVP_DigestFinal_ex(mdctx, md_value, &md_len);
+            EVP_MD_CTX_free(mdctx);
+            sprintf(hash_value1, "%02x%02x%02x", md_value[0], md_value[1], md_value[2]);//只取前24位
+            /*
+            printf("Digest is: ");
+            for (int i = 0; i < md_len; i++)
+                printf("%02x", md_value[i]);
+            printf("\n");
+            */
+            count++;
+        }
+        printf("Number of attempts is :%d\n", count);
+        average += count;
+        //printf("The resulting string is %s:\n", str);
+    }
+    printf("The average number of attempts is:%f\n", average / 5);
+    return 0;
+}
+```
+
+
+
+### collision-resistant
 
 > 2、需要多少次试验才能破解无碰撞属性？同样地，你应该计算平均值。
 
@@ -327,13 +421,150 @@ print("average:", sumTrials/times)
 
 ```
 
-![image-20220430182419604](One-WayHashFunctionandMAC/image-20220430182419604.png)
+![image-20220502202905215](One-WayHashFunctionandMAC/image-20220502202905215.png)
 
-平均值为29902999.6
+平均值为18696450
+
+C版本
+
+```bash
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <string.h>
+#include <openssl/evp.h>
+#include <time.h>
+//生成随机字符串用到的字符
+char strdict[] = "0123456789qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM!\"#$ % &'()*+, -./:;<=>?@[\\]^_`{|}~";
+//生成随机字符串的函数
+void generateString(unsigned char* gen_str, const unsigned int len)
+{
+    int dictlen = strlen(strdict);
+    for (int i = 0; i < len; i++)
+    {
+        int randnumm = rand() % dictlen;
+        gen_str[i] = strdict[randnumm];
+    }
+}
+
+int main(int argc, char* argv[])
+{
+
+    EVP_MD_CTX* mdctx0, * mdctx1;
+    const EVP_MD* md;
+    unsigned char md_value0[EVP_MAX_MD_SIZE], md_value1[EVP_MAX_MD_SIZE];
+    unsigned int md_len, count;
+    float average = 0;
+    const unsigned int len = 12;
+    argv[1] = "md5";//使用md5算法
+    unsigned char str1[len + 1] = { "\0" };//因为字符串末尾还需要一个\0作为结束标志，所以长度为len+1
+    unsigned char str2[len + 1] = { "\0" };
+    srand((unsigned int)time(NULL));//设置随机数种子
+    for (int i = 0; i < 5; i++) //5次破解
+    {
+        count = 0;//尝试次数
+        char hash_value0[7] = "1";//因为字符串末尾还需要一个\0作为结束标志，所以长度为7
+        char hash_value1[7] = "0";
+        while (strcmp(hash_value0, hash_value1))
+        {
+            generateString(str1, len);
+            generateString(str2, len);
+            if (strcmp((const char*)str1, (const char*)str2) == 0)
+                continue;   //生成的两个随机字符串相等则重新生成
+            if (argv[1] == NULL) {
+                printf("Usage: mdtest digestname\n");
+                exit(1);
+            }
+
+            md = EVP_get_digestbyname(argv[1]);
+            if (md == NULL) {
+                printf("Unknown message digest %s\n", argv[1]);
+                exit(1);
+            }
+            //计算str1的哈希值
+            mdctx0 = EVP_MD_CTX_new();
+            EVP_DigestInit_ex2(mdctx0, md, NULL);
+            EVP_DigestUpdate(mdctx0, str1, strlen((const char*)str1));
+            EVP_DigestFinal_ex(mdctx0, md_value0, &md_len);
+            EVP_MD_CTX_free(mdctx0);
+            sprintf(hash_value0, "%02x%02x%02x", md_value0[0], md_value0[1], md_value0[2]);//只取前24位
+            /*
+            printf("Digest is: ");
+            for (int i = 0; i < md_len; i++)
+                printf("%02x", md_value0[i]);
+            printf("\n");
+            */
+            //计算str2的哈希值
+            mdctx1 = EVP_MD_CTX_new();
+            EVP_DigestInit_ex2(mdctx1, md, NULL);
+            EVP_DigestUpdate(mdctx1, str2, strlen((const char*)str2));
+            EVP_DigestFinal_ex(mdctx1, md_value1, &md_len);
+            EVP_MD_CTX_free(mdctx1);
+            sprintf(hash_value1, "%02x%02x%02x", md_value1[0], md_value1[1], md_value1[2]);//只取前24位
+            /*
+            printf("Digest is: ");
+            for (int i = 0; i < md_len; i++)
+                printf("%02x", md_value1[i]);
+            printf("\n");
+            */
+            count++;
+        }
+        printf("Number of attempts is :%d\n", count);
+        average += count;
+        //printf("str1 :%s\n", str1);
+        //printf("str2 :%s\n", str2);
+    }
+    printf("The average number of attempts is:%f\n", average / 5);
+    return 0;
+}
+```
 
 > 3、根据你的观察，使用暴力破解方法更容易破坏哪个属性？
 
-- 可以观察到，平均破解单向hash需要的次数为15151314，平均破解无碰撞hash需要的次数为29902999，显然使用蛮力法更容易破解的属性是单向属性。
+- 可以观察到，平均破解单向hash需要的次数为104693255，平均破解无碰撞hash需要的次数为18696450，显然使用蛮力法更容易破解的属性是无碰撞属性。
 
 > 4、你能用数学方法解释一下你的观察结果的差异吗？
 
+由以上结果可知，破解抗碰撞性要更容易一些（生日攻击原理）。证明过程如下：
+
+1. 单向性
+
+问题描述为：
+
+已知哈希值$H$ ，输入空间的大小为$n$ ，尝试次数为$k$ ，计算能找到一个输入使得其哈希值也为$H$的概率。
+
+解：
+
+对于任意一个输入，其哈希值为$H$的概率为$\frac{1}{n}$哈希值不为$H$的概率为$1-\frac{1}{n}$ 。那么，对于$k$个输入，他们的哈希值都不为$H$的概率为$(1-\frac{1}{n})^k$ 。故，至少有一个输入的哈希值为$H$的概率为
+$$
+1-(1-\frac{1}{n})^k
+$$
+
+
+
+2. 抗碰撞性
+
+问题描述为：
+
+输入空间的大小为$n$，尝试次数为$k$ ，计算找到两个输入使得它们的哈希值相等的概率。
+
+解：
+
+这$k$个输入的哈希值都不相等的概率为：
+$$
+\frac{C^1_n}{n} \frac{C^1_{n-1}}{n} \frac{C^1_{n-2}}{n}\cdots \frac{C^1_{n-k+1}}{n}=\frac{n!}{n^k(n-k)!}
+$$
+​          
+
+则至少两个输入的哈希值相等的概率为：
+$$
+1 - \frac{n!}{n^k(n-k)!}
+$$
+接下来我们比1式和2式的被减数。相除得：
+$$
+\frac{\frac{n!}{n^k(n-k)!}}{(1-\frac{1}{n})^k} = \frac{n!}{(n-1)^k(n-k)!}
+$$
+
+
+​                                          
+
+当输入空间足够大时$(n-1)^k = n^k$，$(n-k)! = n!$，则上式$<1$，自然2式子小于1式子，因此破解抗碰撞性更容易一些。
