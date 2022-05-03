@@ -284,7 +284,7 @@ print("average:", sumTrials/times)
 
 C语言版本
 
-注意此C语言版本仅仅能在Windows上进行了测试，所需的openssl建议大家使用[vcpkg](https://github.com/microsoft/vcpkg)下载，vcpkg的安装和使用方法见：
+由对酒当歌提供，注意此C语言版本仅仅能在Windows上进行了测试，所需的openssl建议大家使用[vcpkg](https://github.com/microsoft/vcpkg)下载，vcpkg的安装和使用方法见：
 
 https://github.com/microsoft/vcpkg/blob/master/README_zh_CN.md
 
