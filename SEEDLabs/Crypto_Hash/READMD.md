@@ -236,7 +236,7 @@ print("Same digits in SHA256 hashes are:", sha2num,
 
 ## 任务4：单向属性与无碰撞属性
 
-> 在这个任务中，我们将研究哈希函数的两个性质之间的区别：单向性质和无碰撞性质。我们将使用蛮 力方法来看看破坏这些属性需要多长时间。不需要使用openssl的命令行工具，而需要编写自己的C程 序来调用openssl加密库中的消息摘要工具。示例代码可以从
+> 在这个任务中，我们将研究哈希函数的两个性质之间的区别：单向性质和无碰撞性质。我们将使用蛮力暴力破解的方法来看看破坏这些属性需要多长时间。不需要使用openssl的命令行工具，而需要编写自己的C程 序来调用openssl加密库中的消息摘要工具。示例代码可以从
 >
 > http://www.openssl.org/docs/crypto/EVP_DigestInit.html下载。
 >
@@ -253,6 +253,9 @@ print("Same digits in SHA256 hashes are:", sha2num,
 ![image-20220430194513161](One-WayHashFunctionandMAC/image-20220430194513161.png)
 
 该程序的目标是通过生成不同字符串的哈希并将其与目标哈希值相匹配。在计算上无法找到到特定哈希的数据映射
+
+#### python
+
 生成字符串并将它们与目标匹配的方法实现如下:
 
 ```python
@@ -282,7 +285,7 @@ print("average:", sumTrials/times)
 
 平均值104693255
 
-C语言版本
+#### C版本win
 
 由对酒当歌提供，注意此C语言版本仅仅能在Windows上进行了测试，所需的openssl建议大家使用[vcpkg](https://github.com/microsoft/vcpkg)下载，vcpkg的安装和使用方法见：
 
@@ -353,12 +356,6 @@ int main(int argc, char* argv[])
             EVP_DigestFinal_ex(mdctx, md_value, &md_len);
             EVP_MD_CTX_free(mdctx);
             sprintf(hash_value1, "%02x%02x%02x", md_value[0], md_value[1], md_value[2]);//只取前24位
-            /*
-            printf("Digest is: ");
-            for (int i = 0; i < md_len; i++)
-                printf("%02x", md_value[i]);
-            printf("\n");
-            */
             count++;
         }
         printf("Number of attempts is :%d\n", count);
@@ -370,7 +367,65 @@ int main(int argc, char* argv[])
 }
 ```
 
+#### Python新版本
 
+```python
+import sys
+import random
+import string
+import hashlib
+
+HEX_LEN = 6
+COLLISION_TIMES = 5
+
+
+def random_string(length):
+    strings = [random.choice(
+        string.ascii_letters + string.digits + string.punctuation) for i in range(length)]
+    return "".join(strings)
+
+
+def find_string(submd5):
+    inp = random_string(20)
+    value = inp
+    md5 = hashlib.md5()
+    md5.update(value.encode("utf-8"))
+    md5value = md5.hexdigest()
+    count = 0
+    while md5value[:HEX_LEN] != submd5:
+        inp = random_string(20)
+        value = inp
+        md5 = hashlib.md5()
+        md5.update(value.encode("utf-8"))
+        md5value = md5.hexdigest()
+        count += 1
+    print("\rNumber of collisions:%d" % count)
+    return inp
+
+
+if __name__ == '__main__':
+
+    print("submd5:")
+    submd5 = sys.stdin.readline()[:-1]
+    print("[*]Proof of work:")
+    print("\tMD5(key)[:%d]==%s" % (HEX_LEN, submd5))
+    print("[+]Give me the key:")
+
+    for _ in range(COLLISION_TIMES):
+        value = find_string(submd5)
+        md5 = hashlib.md5()
+        md5.update(value.encode("utf-8"))
+        md5value = md5.hexdigest()
+
+        print("MD5( %s )==%s" % (value, md5value))
+
+        if md5value[:HEX_LEN] != submd5:
+            print("[-]Access Failed")
+```
+
+![image-20220503203412497](One-WayHashFunctionandMAC/image-20220503203412497.png)
+
+我们手动计算出平均值为34,051,146
 
 ### collision-resistant
 
@@ -391,6 +446,8 @@ int main(int argc, char* argv[])
 ![image-20220430194937508](One-WayHashFunctionandMAC/image-20220430194937508.png)
 
 找不到任何两条具有相同消息摘要的不同消息，碰撞阻力意味着第二原像阻力。如果我们能找到碰撞，就会给签名者提供一种拒绝他们签名的方法
+
+#### python
 
 ```python
 import random
@@ -425,7 +482,7 @@ print("average:", sumTrials/times)
 
 平均值为18696450
 
-C版本
+#### C版本win
 
 ```bash
 #define _CRT_SECURE_NO_WARNINGS
@@ -518,9 +575,171 @@ int main(int argc, char* argv[])
 }
 ```
 
+#### Python新版
+
+```python
+import sys
+import random
+import string
+import hashlib
+
+# 这是比对的位数，比对6*4=24位
+HEX_LEN = 6
+COLLISION_TIMES = 5
+
+
+def random_string(length):
+    strings = [random.choice(
+        string.ascii_letters + string.digits + string.punctuation) for i in range(length)]
+    return "".join(strings)
+
+
+def getmd5(value):
+    md5 = hashlib.md5()
+    md5.update(value.encode("utf-8"))
+    return md5.hexdigest()
+
+
+def find_string():
+    inp = random_string(20)
+    md5value = getmd5(inp)
+    inp2 = random_string(20)
+    md5value2 = getmd5(inp2)
+    count = 0
+    while md5value[:HEX_LEN] != md5value2[:HEX_LEN]:
+        inp = random_string(20)
+        md5value = getmd5(inp)
+        inp2 = random_string(20)
+        md5value2 = getmd5(inp2)
+        count += 1
+        # 不想看动画就注释下一句 动画可能会影响速度 本句主要是测试使用
+        # sys.stdout.write("\r %s %s %s %s %d" % (inp, md5value, inp2, md5value2, count))
+    print("\rNumber of collisions:%d" % count)
+    return inp, inp2
+
+
+if __name__ == '__main__':
+    print("[*]Proof of work:")
+    print("\tMD5(key1)[:%d]==MD5(key2)[:%d]" % (HEX_LEN, HEX_LEN))
+    print("[+]Give me the key:")
+
+    for _ in range(COLLISION_TIMES):
+        value1, value2 = find_string()
+        md5value1 = getmd5(value1)
+        md5value2 = getmd5(value2)
+
+        print("MD5( %s )==%s\nMD5( %s )==%s" % (value1, md5value1, value2, md5value2))
+
+        if md5value1[:HEX_LEN] != md5value2[:HEX_LEN]:
+            print("[-]Access Failed")
+```
+
+![image-20220503194525899](One-WayHashFunctionandMAC/image-20220503194525899.png)
+
+平均值：18,161,511
+
+#### C-Linux
+
+```c
+#include <stdio.h>
+#include <stdlib.h>
+#include <openssl/evp.h>
+#include <openssl/bn.h>
+#include <time.h>
+
+// Hash function collision test.
+// gcc -o t42 t42s.c -fpermissive -lcrypto
+
+#define threshold 24
+#define TIMES 5
+void generate(char *buffer)
+{
+    srand(clock());
+    for (int i = 0; i < 512 / 8; i++)
+    {
+        buffer[i] = (unsigned char)(rand() % 255);
+    }
+}
+
+int verify(char *origin, char *result)
+{
+    int len = threshold / 8;
+    for (int i = 0; i < len; i++)
+    {
+        if ((unsigned int)origin[i] != (unsigned int)result[i])
+            return 0;
+    }
+    return 1;
+}
+
+int main()
+{
+
+    EVP_MD_CTX *mdctx;
+    const EVP_MD *md = EVP_get_digestbyname("md5");
+    unsigned char *message, *director;
+
+    message = (unsigned char *)malloc(512 / 16);
+    director = (unsigned char *)malloc(512 / 16);
+
+    unsigned char md_value[EVP_MAX_MD_SIZE];
+    unsigned int md_len, i;
+
+    unsigned int sum = 0;
+    for (int round = 1; round <= TIMES; round++)
+    {
+
+        // random initializate a digest .
+        printf("Round %d, target hash : \n", round);
+        srand(clock());
+        for (int i = 0; i < 16; i++)
+        {
+            director[i] = (unsigned char)(rand() % 255);
+            printf("%02x", director[i]);
+        }
+        printf("\n");
+
+        long int trials = 0;
+        do
+        {
+            trials++;
+            generate(message);
+            mdctx = EVP_MD_CTX_new();
+            EVP_DigestInit_ex(mdctx, md, NULL);
+            EVP_DigestUpdate(mdctx, message, 512 / 8);
+            EVP_DigestFinal_ex(mdctx, md_value, &md_len);
+            EVP_MD_CTX_free(mdctx);
+        } while (!verify(director, md_value));
+        sum += trials;
+
+        printf("find solution:\n");
+        for (int i = 0; i < 16; i++)
+            printf("%02x", md_value[i]);
+
+        printf("\nRound %d takes %ld trials.\n", round, trials);
+    }
+
+    printf("Average trials : %f", (double)sum / TIMES);
+
+    return 0;
+}
+
+```
+
+
+
+```
+gcc -o t42 t42s.c -lcrypto
+```
+
+
+
+### 观察分析
+
 > 3、根据你的观察，使用暴力破解方法更容易破坏哪个属性？
 
-- 可以观察到，平均破解单向hash需要的次数为104693255，平均破解无碰撞hash需要的次数为18696450，显然使用蛮力法更容易破解的属性是无碰撞属性。
+- Python，平均破解单向hash需要的次数为104,693,255，平均破解无碰撞hash需要的次数为18,696,450，显然使用蛮力法更容易破解的属性是无碰撞属性。
+- Python新版本，平均破解单向hash需要的次数为34,051,146，平均破解无碰撞hash需要的次数为18,161,511，显然使用蛮力法更容易破解的属性是无碰撞属性。
 
 > 4、你能用数学方法解释一下你的观察结果的差异吗？
 
@@ -568,3 +787,4 @@ $$
 ​                                          
 
 当输入空间足够大时$(n-1)^k = n^k$，$(n-k)! = n!$，则上式$<1$，自然2式子小于1式子，因此破解抗碰撞性更容易一些。
+
