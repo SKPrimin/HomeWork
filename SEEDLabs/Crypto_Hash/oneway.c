@@ -1,18 +1,20 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <openssl/evp.h>
-#include <openssl/bn.h>
 #include <time.h>
 
-// Hash function collision test.
-// gcc -o t42 t42s.c -fpermissive -lcrypto
+// Hash function oneway test.
+// gcc -o oneway oneway.c  -lcrypto
 
-#define threshold 24
 #define TIMES 5
-void generate(char *buffer)
+#define threshold 24
+#define messagelen 32
+#define directorlen 32
+
+void Generate(char *buffer)
 {
     srand(clock());
-    for (int i = 0; i < 512 / 8; i++)
+    for (int i = 0; i < messagelen / 2; i++)
     {
         buffer[i] = (unsigned char)(rand() % 255);
     }
@@ -36,31 +38,31 @@ int main()
     const EVP_MD *md = EVP_get_digestbyname("md5");
     unsigned char *message, *director;
 
-    message = (unsigned char *)malloc(512 / 16);
-    director = (unsigned char *)malloc(512 / 16);
+    message = (unsigned char *)malloc(messagelen);
+    director = (unsigned char *)malloc(directorlen);
 
     unsigned char md_value[EVP_MAX_MD_SIZE];
     unsigned int md_len, i;
 
-    unsigned int sum = 0;
-    for (int round = 1; round <= TIMES; round++)
+    // initializate a digest.
+    srand(clock());
+    printf("Target Hash :");
+    for (int i = 0; i < directorlen / 2; i++)
     {
+        director[i] = (unsigned char)(rand() % 255);
+        printf("%02x", director[i]);
+    }
+    printf("\n");
+    fflush(stdout);
 
-        // random initializate a digest .
-        printf("Round %d, target hash : \n", round);
-        srand(clock());
-        for (int i = 0; i < 16; i++)
-        {
-            director[i] = (unsigned char)(rand() % 255);
-            printf("%02x", director[i]);
-        }
-        printf("\n");
-
+    long int sum = 0;
+    for (int round = 0; round < TIMES; round++)
+    {
         long int trials = 0;
         do
         {
             trials++;
-            generate(message);
+            Generate(message);
             mdctx = EVP_MD_CTX_new();
             EVP_DigestInit_ex(mdctx, md, NULL);
             EVP_DigestUpdate(mdctx, message, 512 / 8);
@@ -69,11 +71,19 @@ int main()
         } while (!verify(director, md_value));
         sum += trials;
 
-        printf("find solution:\n");
+        printf("find solution, index %d:\n", round + 1);
         for (int i = 0; i < 16; i++)
             printf("%02x", md_value[i]);
+        printf("\n");
 
-        printf("\nRound %d takes %ld trials.\n", round, trials);
+        printf("Data:");
+        for (int i = 0; i < messagelen / 2; i++)
+        {
+            printf("%02x", message[i]);
+        }
+
+        printf("\tSolution %d takes %ld trials.\n", round + 1, trials);
+        fflush(stdout);
     }
 
     printf("Average trials : %f", (double)sum / TIMES);

@@ -1,8 +1,6 @@
-#   Crypto One-Way Hash Function and MAC 单向哈希函数和MAC
+#   Crypto One-Way Hash Function and MAC Seed 单向属性与无碰撞属性 python C 实现
 
-
-
-> 本实验室的学习目标是让学生熟悉单向哈希函数和消息认证码(MAC)。在完成实验室后，除了获得更深 入的概念基础外，学生还应该能够使用工具和编写程序来生成给定信息的单向哈希值和MAC。
+> 本实验的学习目标是让学生熟悉单向哈希函数和消息认证码(MAC)。在完成实验室后，除了获得更深 入的概念基础外，学生还应该能够使用工具和编写程序来生成给定信息的单向哈希值和MAC。
 
 ## 准备工作
 
@@ -234,7 +232,7 @@ print("Same digits in SHA256 hashes are:", sha2num,
 
 发现大致在50%左右，由于只有0、1两种可能性，所以随机情况下也会接近50%。
 
-## 任务4：单向属性与无碰撞属性
+# 任务4：单向属性与无碰撞属性
 
 > 在这个任务中，我们将研究哈希函数的两个性质之间的区别：单向性质和无碰撞性质。我们将使用蛮力暴力破解的方法来看看破坏这些属性需要多长时间。不需要使用openssl的命令行工具，而需要编写自己的C程 序来调用openssl加密库中的消息摘要工具。示例代码可以从
 >
@@ -244,7 +242,9 @@ print("Same digits in SHA256 hashes are:", sha2num,
 >
 > 我们在任意平台上运行python，由于一般来讲主机运行速度显著快于虚拟机，在主机上运行脚本
 
-### one-way
+代码仓库：[Crypto_Hash](https://github.com/SKPrimin/HomeWork/tree/main/SEEDLabs/Crypto_Hash)：https://github.com/SKPrimin/HomeWork/tree/main/SEEDLabs/Crypto_Hash
+
+## one-way
 
 > 1、需要多少次试验才能打破单向性属性？你应该重复你的实验多次，并报告你的平均试验次数。
 
@@ -254,7 +254,7 @@ print("Same digits in SHA256 hashes are:", sha2num,
 
 该程序的目标是通过生成不同字符串的哈希并将其与目标哈希值相匹配。在计算上无法找到到特定哈希的数据映射
 
-#### python
+### python
 
 生成字符串并将它们与目标匹配的方法实现如下:
 
@@ -285,7 +285,7 @@ print("average:", sumTrials/times)
 
 平均值104693255
 
-#### C版本win
+### C版本win
 
 由对酒当歌提供，注意此C语言版本仅仅能在Windows上进行了测试，所需的openssl建议大家使用[vcpkg](https://github.com/microsoft/vcpkg)下载，vcpkg的安装和使用方法见：
 
@@ -367,7 +367,7 @@ int main(int argc, char* argv[])
 }
 ```
 
-#### Python新版本
+### Python新版本
 
 ```python
 import sys
@@ -423,11 +423,119 @@ if __name__ == '__main__':
             print("[-]Access Failed")
 ```
 
-![image-20220503203412497](One-WayHashFunctionandMAC/image-20220503203412497.png)
+<img src="One-WayHashFunctionandMAC/image-20220503203412497.png" alt="image-20220503203412497" style="zoom: 50%;" />
 
 我们手动计算出平均值为34,051,146
 
-### collision-resistant
+### C-Linux
+
+本程序由[[**lanpesk**](https://lanpesk.github.io/)]提供
+
+```c
+#include <stdio.h>
+#include <stdlib.h>
+#include <openssl/evp.h>
+#include <time.h>
+
+// Hash function oneway test.
+// gcc -o oneway oneway.c  -lcrypto
+
+#define TIMES 5
+#define threshold 24
+#define messagelen 32
+#define directorlen 32
+
+void Generate(char *buffer)
+{
+    srand(clock());
+    for (int i = 0; i < messagelen / 2; i++)
+    {
+        buffer[i] = (unsigned char)(rand() % 255);
+    }
+}
+
+int verify(char *origin, char *result)
+{
+    int len = threshold / 8;
+    for (int i = 0; i < len; i++)
+    {
+        if ((unsigned int)origin[i] != (unsigned int)result[i])
+            return 0;
+    }
+    return 1;
+}
+
+int main()
+{
+
+    EVP_MD_CTX *mdctx;
+    const EVP_MD *md = EVP_get_digestbyname("md5");
+    unsigned char *message, *director;
+
+    message = (unsigned char *)malloc(messagelen);
+    director = (unsigned char *)malloc(directorlen);
+
+    unsigned char md_value[EVP_MAX_MD_SIZE];
+    unsigned int md_len, i;
+
+    // initializate a digest.
+    srand(clock());
+    printf("Target Hash :");
+    for (int i = 0; i < directorlen / 2; i++)
+    {
+        director[i] = (unsigned char)(rand() % 255);
+        printf("%02x", director[i]);
+    }
+    printf("\n");
+    fflush(stdout);
+
+    long int sum = 0;
+    for (int round = 0; round < TIMES; round++)
+    {
+        long int trials = 0;
+        do
+        {
+            trials++;
+            Generate(message);
+            mdctx = EVP_MD_CTX_new();
+            EVP_DigestInit_ex(mdctx, md, NULL);
+            EVP_DigestUpdate(mdctx, message, 512 / 8);
+            EVP_DigestFinal_ex(mdctx, md_value, &md_len);
+            EVP_MD_CTX_free(mdctx);
+        } while (!verify(director, md_value));
+        sum += trials;
+
+        printf("find solution, index %d:\n", round + 1);
+        for (int i = 0; i < 16; i++)
+            printf("%02x", md_value[i]);
+        printf("\n");
+
+        printf("Data:");
+        for (int i = 0; i < messagelen / 2; i++)
+        {
+            printf("%02x", message[i]);
+        }
+
+        printf("\tSolution %d takes %ld trials.\n", round + 1, trials);
+        fflush(stdout);
+    }
+    printf("Average trials : %f", (double)sum / TIMES);
+    return 0;
+}
+```
+
+编译运行
+
+```bash
+gcc -o oneway oneway.c  -lcrypto
+./oneway
+```
+
+<img src="One-WayHashFunctionandMAC/image-20220503234734717.png" alt="image-20220503234734717" style="zoom: 67%;" />
+
+verage trials : 23238573
+
+## collision-resistant
 
 > 2、需要多少次试验才能破解无碰撞属性？同样地，你应该计算平均值。
 
@@ -447,7 +555,7 @@ if __name__ == '__main__':
 
 找不到任何两条具有相同消息摘要的不同消息，碰撞阻力意味着第二原像阻力。如果我们能找到碰撞，就会给签名者提供一种拒绝他们签名的方法
 
-#### python
+### python
 
 ```python
 import random
@@ -482,7 +590,7 @@ print("average:", sumTrials/times)
 
 平均值为18696450
 
-#### C版本win
+### C-win
 
 ```bash
 #define _CRT_SECURE_NO_WARNINGS
@@ -575,7 +683,7 @@ int main(int argc, char* argv[])
 }
 ```
 
-#### Python新版
+### Python新版
 
 ```python
 import sys
@@ -634,11 +742,13 @@ if __name__ == '__main__':
             print("[-]Access Failed")
 ```
 
-![image-20220503194525899](One-WayHashFunctionandMAC/image-20220503194525899.png)
+<img src="One-WayHashFunctionandMAC/image-20220503194525899.png" alt="image-20220503194525899" style="zoom: 50%;" />
 
 平均值：18,161,511
 
-#### C-Linux
+### C-Linux
+
+本程序由[[**lanpesk**](https://lanpesk.github.io/)]提供
 
 ```c
 #include <stdio.h>
@@ -648,14 +758,16 @@ if __name__ == '__main__':
 #include <time.h>
 
 // Hash function collision test.
-// gcc -o t42 t42s.c -fpermissive -lcrypto
-
-#define threshold 24
+// gcc -o collsion collision.c -lcrypto
 #define TIMES 5
-void generate(char *buffer)
+#define threshold 24
+#define messagelen 32
+#define directorlen 32
+
+void Generate(char *buffer)
 {
     srand(clock());
-    for (int i = 0; i < 512 / 8; i++)
+    for (int i = 0; i < messagelen / 2; i++)
     {
         buffer[i] = (unsigned char)(rand() % 255);
     }
@@ -679,31 +791,31 @@ int main()
     const EVP_MD *md = EVP_get_digestbyname("md5");
     unsigned char *message, *director;
 
-    message = (unsigned char *)malloc(512 / 16);
-    director = (unsigned char *)malloc(512 / 16);
+    message = (unsigned char *)malloc(messagelen);
+    director = (unsigned char *)malloc(directorlen);
 
     unsigned char md_value[EVP_MAX_MD_SIZE];
     unsigned int md_len, i;
 
-    unsigned int sum = 0;
-    for (int round = 1; round <= TIMES; round++)
+    long int sum = 0;
+    for (int round = 0; round < TIMES; round++)
     {
 
         // random initializate a digest .
-        printf("Round %d, target hash : \n", round);
+        printf("Round %d \n target hash : ", round + 1);
         srand(clock());
-        for (int i = 0; i < 16; i++)
+        for (int i = 0; i < directorlen / 2; i++)
         {
             director[i] = (unsigned char)(rand() % 255);
             printf("%02x", director[i]);
         }
         printf("\n");
-
+        fflush(stdout);
         long int trials = 0;
         do
         {
             trials++;
-            generate(message);
+            Generate(message);
             mdctx = EVP_MD_CTX_new();
             EVP_DigestInit_ex(mdctx, md, NULL);
             EVP_DigestUpdate(mdctx, message, 512 / 8);
@@ -712,34 +824,34 @@ int main()
         } while (!verify(director, md_value));
         sum += trials;
 
-        printf("find solution:\n");
+        printf("find solution: ");
         for (int i = 0; i < 16; i++)
             printf("%02x", md_value[i]);
 
-        printf("\nRound %d takes %ld trials.\n", round, trials);
+        printf("\tRound %d takes %ld trials.\n", round + 1, trials);
+        fflush(stdout);
     }
 
     printf("Average trials : %f", (double)sum / TIMES);
 
     return 0;
 }
-
 ```
 
-
-
+```bash
+gcc -o collsion collision.c -lcrypto
+./collsion
 ```
-gcc -o t42 t42s.c -lcrypto
-```
 
+<img src="One-WayHashFunctionandMAC/image-20220503235251255.png" alt="image-20220503235251255" style="zoom:67%;" />
 
-
-### 观察分析
+## 观察分析
 
 > 3、根据你的观察，使用暴力破解方法更容易破坏哪个属性？
 
-- Python，平均破解单向hash需要的次数为104,693,255，平均破解无碰撞hash需要的次数为18,696,450，显然使用蛮力法更容易破解的属性是无碰撞属性。
-- Python新版本，平均破解单向hash需要的次数为34,051,146，平均破解无碰撞hash需要的次数为18,161,511，显然使用蛮力法更容易破解的属性是无碰撞属性。
+- Python简易版本 Mini，平均破解单向hash需要的次数为104,693,255，平均破解无碰撞hash需要的次数为18,696,450，显然使用蛮力法更容易破解的属性是无碰撞属性。
+- Python新版本Pro Max，平均破解单向hash需要的次数为34,051,146，平均破解无碰撞hash需要的次数为18,161,511，显然使用蛮力法更容易破解的属性是无碰撞属性。
+- C-Linux版本 SeedUbt20，平均破解单向hash需要的次数为23,238,573，平均破解无碰撞hash需要的次数为20,356,310，显然使用蛮力法更容易破解的属性是无碰撞属性。 
 
 > 4、你能用数学方法解释一下你的观察结果的差异吗？
 
@@ -757,8 +869,6 @@ gcc -o t42 t42s.c -lcrypto
 $$
 1-(1-\frac{1}{n})^k
 $$
-
-
 
 2. 抗碰撞性
 
