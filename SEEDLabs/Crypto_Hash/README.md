@@ -92,7 +92,7 @@ openssl dgst -sm3 testfile
 > openssl dgst -md5 -hmac "abcdefg" filename
 > ```
 >
-> 请使用HMAC-MD5、HMAC-SHA256和HMAC-SHA1为您选择的任何文件生成密钥控散列。请试试几个不同长度的密钥。我们必须在HMAC中使用固定大小的密钥吗？如果是这样，密钥的大小是多少？如果不是，为什 么？
+> 请使用HMAC-MD5、HMAC-SHA256和HMAC-SHA1为您选择的任何文件生成密钥控散列。请试试几个不同长度的密钥。我们必须在HMAC中使用固定大小的密钥吗？如果是这样，密钥的大小是多少？如果不是，为什么？
 
 ```bash
 openssl dgst -md5 -hmac "123456" testfile
