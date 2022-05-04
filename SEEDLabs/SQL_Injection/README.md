@@ -4,9 +4,13 @@
 
 SQL 注入是一种代码注入技术，它利用 Web 应用程序和数据库服务器之间的接口中的漏洞。当用户的输入在发送到后端数据库服务器之前未在 Web 应用程序中正确检查时，就会出现此漏洞。
 
+![](SQLInjection/Figure11.1_00-16516727113341.jpg)
+
 许多 Web 应用程序从用户那里获取输入，然后使用这些输入来构造 SQL 查询，因此 Web 应用程序可以从数据库中提取信息。Web 应用程序还使用 SQL 查询将信息存储在数据库中。这些是 Web 应用程序开发中的常见做法。如果 SQL 查询构造不仔细，就会出现 SQL 注入漏洞。SQL 注入攻击是对 Web 应用程序最常见的攻击之一。
 
 本实验的目标是找到利用 SQL-Injection 漏洞的方法，展示攻击可以造成的破坏，并掌握可以帮助防御此类攻击的技术。
+
+![](SQLInjection/Figure11.2_00-16516728349802.jpg)
 
 本文作者：zmzzmqa、对酒当歌
 
@@ -170,19 +174,19 @@ Folder: /var/www/SQLInjection/
 
    ```xml
    <VirtualHost *>
-
+   
    ServerName http://www.example1.com
-
+   
    DocumentRoot /var/www/Example_1/
-
+   
    </VirtualHost>
-
+   
    <VirtualHost *>
-
+   
    ServerName http://www.example2.com
-
+   
    DocumentRoot /var/www/Example_2/
-
+   
    </VirtualHost>
    ```
 
@@ -308,7 +312,7 @@ sudo  service  apache2  restart
 通过这个 web 应用程序，数据库中的信息。在这个 web 应用程序中主要有两个角色：管理员是一个特权角色，可以管理每个员工的个人信息；“员工”是普通角色，可以查看或更新自己的个人信息。所有员工信息如下表所示。
 
 | User  | Employee ID | Password  | Salary | Birthday | SSN      | Nickname | Email | Address | Phone# |
-| ----- | ----------- | --------- | ------ | -------- | -------- | -------- | ----- | ------- | ------ | --- |
+| ----- | ----------- | --------- | ------ | -------- | -------- | -------- | ----- | ------- | ------ | 
 | Admin | 99999       | seedadmin | 400000 | 3/5      | 43254314 |          |       |         |        |     |
 | Alice | 10000       | seedalice | 20000  | 9/20     | 10211002 |          |       |         |        |     |
 | Boby  | 20000       | seedboby  | 50000  | 4/20     | 10213352 |          |       |         |        |     |
