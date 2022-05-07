@@ -185,8 +185,6 @@ print(frequentCount(cipher, False,0))
 {'r': 75, 'n': 62, 's': 62, 'p': 52, 'q': 50, 'y': 43, 'b': 38, 'v': 37, 't': 31, 'd': 25, 'l': 21, 'a': 19, 'k': 19, 'e': 19, 'z': 18, 'c': 14, 'o': 13, 'g': 12, 'x': 10, 'j': 7, 'i': 5, 'm': 4, 'u': 3}
 ```
 
-![image-20220506111033810](README/image-20220506111033810.png)
-
 真正的英文字母频率
 
 | 字母 | 频率    | 字母 | 频率   | 字母 | 频率   |
@@ -566,12 +564,16 @@ if __name__ == '__main__':
             print(f'猜测密钥长度 {keyLength} 无符合条件')
 ```
 
-![image-20220507194937739](README/image-20220507194937739.png)
-
 解密得到
 
 ```
-that process said i starts up on the supposition that when you have eliminatedall which is impossible then whatever remains however improbable must bethe truth it may well bethat severalex planations remain in which case one tries test after test until one or other of them has aconvincing a mount of support we will now apply this principle to the case inpointasit was first presented to me there were three possible explanations of the seclusionorincarceration of this gentlemaninanouthouseofhisfathersmansiontherewastheexplanationthathewasinhidingforacrimeorthathewasmadandthattheywishedtoavoidanasylumorthathehadsomediseasewhichcausedhissegregationicouldthinkofnootheradequatesolutionsthesethenhadtobesiftedandbalancedagainst each other
+that process said i starts up on the supposition that when you have eliminatedall which is impossible then whatever remains however improbable must bethe truth it may well be that severalex planations remain in which case one tries test after test until one or other of them has a convincing a mount of support we will now apply this principle to the case inpointasit was first presented to me there were three possible explanations of the seclusion or incarceration of this gentlemaninan out house of his father smansion there was theex planation that he was in hiding for acrime or that he was mad and that they wished to avoid anasylumor that he had some disease which caused his segregation i could think of no other adequate solutions these then had to be sifted and balance dagainst each other
+```
+
+
+
+```
+这个过程说我开始以这样的假设：当您消除了一切，这是不可能的，那么剩下的一切，但是不可能的真理，很可能是Severalex的计划在这种情况下进行测试，直到他们中的一个或另一个具有令人信服的测试 我们现在将向我应用这一原则，首先将此原则应用于我的案件中，有三种可能的解释，即对他父亲Smansion的这个绅士居住的房屋的隔离或监禁，他的计划是他躲藏在杂技或 他很生气，他们希望避免呈苯珠，因为他患有某种疾病，这引起了他的隔离，我不能想到其他足够的解决方案，然后必须筛选这些疾病，并互相平衡
 ```
 
 解密网站：
@@ -586,7 +588,7 @@ https://www.mygeocachingprofile.com/codebreaker.vigenerecipher.aspx
 
 压缩包的文件大小很小，只有3，代表仅有3个字符，可以通过CRC碰撞，获取到文件中的字符串内容。
 
-![image-20220507204059318](README/image-20220507204059318.png)
+![CRC](CRC.png)
 
 ```python
 import binascii
