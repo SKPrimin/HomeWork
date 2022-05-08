@@ -4,7 +4,7 @@ Dword shoot，一种很简单的漏洞溢出技巧，所以就简单的说明一
 
 本文作者：[对酒当歌](https://blog.csdn.net/youyouwoxi)
 
-本题来自http://pwnable.kr/play.php，可线上做题
+本题来自 http://pwnable.kr/play.php ，可线上做题
 
 ```
 ssh unlink@pwnable.kr -p2222 (pw: guest)
