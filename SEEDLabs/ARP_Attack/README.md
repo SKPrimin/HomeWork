@@ -486,12 +486,6 @@ sendp(pkt2, count=1)
 
 <img src="ARPCachePoisoning/image-20220505203832843.png" alt="image-20220505203832843" style="zoom:67%;" />
 
-
-
-
-
-
-
 查看A的缓存表
 
 ![image-20220505203523768](ARPCachePoisoning/image-20220505203523768.png)
