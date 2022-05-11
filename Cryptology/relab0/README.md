@@ -455,7 +455,7 @@ import string
 
 def Cutting(cipher, key_length):
     """据密钥长度对text进行分组,分组后为交织在一起的凯撒密码"""
-    groups = ["" for _ in range(key_length)]
+    groups = [''] * key_length
     for i, c in enumerate(cipher):
         groups[i % key_length] += c
     return groups
@@ -502,28 +502,27 @@ def getAvgIC(keyLength, res, find):
     return sumIC / keyLength
 
 
-def getKey(keyLength, cipherGroup, find):
-    """根据密钥长度猜测密钥 分组密钥的拟重合指数阈值 fi*pi/n（n是密文长度）"""
+def getKey(keyLength, cipherGroup, countOfGroup):
+    """根据密钥长度猜测密钥 """
     key = ""
     for i in range(keyLength):  # 共keyLength组密文
-        delta = 0  # 位移量
+        # delta = 0  # 位移量
         # 最多26个字母
-        for K in string.ascii_uppercase:
+        for j, K in enumerate(string.ascii_uppercase):
             IC = 0
-            C_i = 65 + delta
+            Ci = ord('A') + j
             subCipher = cipherGroup[i]
-            found = find[i]
-            for p in probability:  # 根据拟重合指数公式，此处C_i所表示的字母是与英语的中第i个字母对应的
-                if C_i == 91: C_i = 65
-                IC += p * found[chr(C_i)]
-                C_i += 1
+            found = countOfGroup[i]
+            for p in probability:  # 根据拟重合指数公式，此处Ci所表示的字母是与英语的中第i个字母对应的
+                if Ci == ord('Z') + 1:
+                    Ci = ord('A')
+                IC += p * found[chr(Ci)]
+                Ci += 1
             IC /= len(subCipher)
             # print(IC)  # 无结果时查看 调整 GROUP_IC
             if IC >= GROUP_IC:
                 key += K
                 break
-            else:
-                delta += 1
         # print("**********************************")# 无结果时查看
     if keyLength != len(key):
         key = None
@@ -547,19 +546,22 @@ if __name__ == '__main__':
     # 整体的平均重合指数阈值
     ALL_IC = 0.06
     # 单词频率表
-    probability = [0.08167, 0.01492, 0.02782, 0.04253, 0.12705, 0.02228, 0.02015, 0.06094, 0.06996, 0.00153, 0.00772, 0.04025, 0.02406, 0.06749, 0.07507, 0.01929, 0.0009, 0.05987, 0.06327, 0.09056, 0.02758, 0.00978, 0.02360, 0.0015, 0.01974, 0.00074]
+    probability = [0.08167, 0.01492, 0.02782, 0.04253, 0.12705, 0.02228, 0.02015, 0.06094, 0.06996, 0.00153, 0.00772,
+                   0.04025, 0.02406, 0.06749, 0.07507, 0.01929, 0.0009, 0.05987, 0.06327, 0.09056, 0.02758, 0.00978,
+                   0.02360, 0.0015, 0.01974, 0.00074]
     cipher = "FPSLBRFRPWEASAPIJILVFAMHANKWPWGXHGEIKXZRFPSLIHVCJSGPSNQECXXMZILWPACAHLUKZAEIDEZWEQTDQTYTYATILWHEIGPQMQFKTONTGIDQEHDOSPMPQUMKFBVISIFZMLTIKBLCIMDDNEKWLXEMNWDACTITXIFSFIFCDVQUSAZIELSMOPUSEEFCPXDQWKFEJILJFMJLQSKJYXUTGFQOIDELQZGXFHVBSEEIUGZVZCNMZOSEAUEIZJECHHARKLPAUTDFAWREAPKBZAEPIXYGUXDWFOKWPGMAWAZPFXYXMAALIAJUTVEBHJQSVCEIPBGEQTYTCIIMJWFHITPTAAKANLVTITXIFSFIFCDSRBZWEETAFWUWFGDIERLVOMJSFIFCZJFPAKSEEIWIYIFAZAEDFXTWMKQOWWTWRILZQRJBLREQGFFHVGPAMALZQEOEWEZILAANKWLXTMOSEIEWTHUVYXARRRCMYMGJFHRISIIIKEMDRCOXTILLTEPLTWTMVLAAMDTHMVSKKLLBZVFPSLTEYPOWAUWVUSVPDIIPAUTCRJDIPPAKEEXGPKMBAGZITDFPPBZAZKFUYSABZWDAUTBYMBWKALLITSZALZQSVISIZPSVFOSTDMRBWVMNUQLPMVUWPAXPTREBWSOHFISID"
     minKeyLength = 5
     maxKeyLength = 15
     for keyLength in range(minKeyLength, maxKeyLength + 1):
         cipherGroups, countOfGroup = cutAndCount(cipher, keyLength)  # 得到分组
         avgIC = getAvgIC(keyLength, cipherGroups, countOfGroup)  # 计算平均重合重数
-        # print(avgIC) # 无结果时查看，以便调整阈值
+        print(avgIC)  # 无结果时查看，以便调整阈值
         if avgIC >= ALL_IC:
             key = getKey(keyLength, cipherGroups, countOfGroup)
             if key is not None:
                 decipher = decrypt(key, cipher)
-                print(f'猜测密钥长度 {keyLength} 可能存在密钥 {key} 解密得到明文: \n{decipher}')
+                print(
+                    f'猜测密钥长度 {keyLength} 可能存在密钥 {key} 解密得到明文: \n{decipher}\n小写格式\n{decipher.lower()}')
         else:
             print(f'猜测密钥长度 {keyLength} 无符合条件')
 ```
@@ -654,7 +656,7 @@ ADGG AADG FDFA AVFD DAAV GDFF DXFG AFAA DDDF GFGD FFAG VDDF AFFG AADG AAAG AAGD 
 ```
 
 > 乔治·帕恩文（Georges Painvin）知道他的部队处于危险之中。 他没有太多时间使用笔，纸和他的思想解密密文。
-> Cipher text仅包含上述字符，而在明文中，三个最频繁的字符（E，N，I）的频率与通常在德语中的情况相同。
+> Ciphertext仅包含上述字符，而在明文中，三个最频繁的字符（E，N，I）的频率与通常在德语中的情况相同。
 > 这意味着“E”的出现率最高，“ N”第二高，“I” 第三高。 Georges Painvin都不知道替代密钥和换位密钥。 但他知道对手只是用一个德语4个字符的单词作为替换键，用4个数字作为换位键。
 > 您是否可以通过解密密文来帮助Georges Painvin？
 

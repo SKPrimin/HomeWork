@@ -3,7 +3,7 @@ import string
 
 def Cutting(cipher, key_length):
     """据密钥长度对text进行分组,分组后为交织在一起的凯撒密码"""
-    groups = ["" for _ in range(key_length)]
+    groups = [''] * key_length
     for i, c in enumerate(cipher):
         groups[i % key_length] += c
     return groups
@@ -50,28 +50,27 @@ def getAvgIC(keyLength, res, find):
     return sumIC / keyLength
 
 
-def getKey(keyLength, cipherGroup, find):
-    """根据密钥长度猜测密钥 分组密钥的拟重合指数阈值 fi*pi/n（n是密文长度）"""
+def getKey(keyLength, cipherGroup, countOfGroup):
+    """根据密钥长度猜测密钥 """
     key = ""
     for i in range(keyLength):  # 共keyLength组密文
-        delta = 0  # 位移量
+        # delta = 0  # 位移量
         # 最多26个字母
-        for K in string.ascii_uppercase:
+        for j, K in enumerate(string.ascii_uppercase):
             IC = 0
-            C_i = 65 + delta
+            Ci = ord('A') + j
             subCipher = cipherGroup[i]
-            found = find[i]
-            for p in probability:  # 根据拟重合指数公式，此处C_i所表示的字母是与英语的中第i个字母对应的
-                if C_i == 91: C_i = 65
-                IC += p * found[chr(C_i)]
-                C_i += 1
+            found = countOfGroup[i]
+            for p in probability:  # 根据拟重合指数公式，此处Ci所表示的字母是与英语的中第i个字母对应的
+                if Ci == ord('Z') + 1:
+                    Ci = ord('A')
+                IC += p * found[chr(Ci)]
+                Ci += 1
             IC /= len(subCipher)
             # print(IC)  # 无结果时查看 调整 GROUP_IC
             if IC >= GROUP_IC:
                 key += K
                 break
-            else:
-                delta += 1
         # print("**********************************")# 无结果时查看
     if keyLength != len(key):
         key = None
@@ -104,11 +103,12 @@ if __name__ == '__main__':
     for keyLength in range(minKeyLength, maxKeyLength + 1):
         cipherGroups, countOfGroup = cutAndCount(cipher, keyLength)  # 得到分组
         avgIC = getAvgIC(keyLength, cipherGroups, countOfGroup)  # 计算平均重合重数
-        # print(avgIC) # 无结果时查看，以便调整阈值
+        print(avgIC)  # 无结果时查看，以便调整阈值
         if avgIC >= ALL_IC:
             key = getKey(keyLength, cipherGroups, countOfGroup)
             if key is not None:
                 decipher = decrypt(key, cipher)
-                print(f'猜测密钥长度 {keyLength} 可能存在密钥 {key} 解密得到明文: \n{decipher}\n小写格式\n{decipher.lower()}')
+                print(
+                    f'猜测密钥长度 {keyLength} 可能存在密钥 {key} 解密得到明文: \n{decipher}\n小写格式\n{decipher.lower()}')
         else:
             print(f'猜测密钥长度 {keyLength} 无符合条件')
