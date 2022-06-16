@@ -54,7 +54,7 @@ Prot.Addr.Type：IP地址长度=4（字节）
 
 <center>图1：实验室环境设置</center>
 
-### 2.1范围设置和命令
+### 2.1容器设置和命令
 
 > 请从实验室的网站解压缩，下载[Labsetup.zip](https://seedsecuritylabs.org/Labs_20.04/Files/ARP_Attack/Labsetup.zip) (https://seedsecuritylabs.org/Labs_20.04/Files/ARP_Attack/Labsetup.zip), 将其解压，然后将复制转移到虚拟机中。文件，然后使用docker-compose.yml文件来设置实验室环境。 可以从用户手册中找到该文件中内容和所有涉及Dockerfile的详细说明，该用户手册链接到本实验室的网站。 如果这是您第一次使用容器设置种子实验室环境，那么阅读用户手册非常重要。
 >
