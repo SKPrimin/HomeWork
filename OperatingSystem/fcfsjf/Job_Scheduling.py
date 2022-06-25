@@ -1,5 +1,5 @@
 """实验一：分别设计FCFS和SJF算法来实现调度"""
-print('E01914271 梁意')
+
 count = int(input('请输入进程数目：'))
 process = []
 

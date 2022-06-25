@@ -36,6 +36,8 @@
 
 ## 代码实现
 
+### java
+
 #### 数据结构和符号说明
 
 - `diskCollection` ArrayList类型数据，为初始的磁道号序列
@@ -303,9 +305,158 @@ public class Test {
 }
 ```
 
-###### 运行截图
+### 运行截图
 
 ![image-20211218234553168](磁盘调度二.assets/image-20211218234553168.png)
 
+## python
+
+```python
+import copy
 
 
+# 扫描算法
+def SCAN(seq, start, drct):
+    tempseq = copy.deepcopy(seq)
+    distance = 0
+    nownum = start
+    if drct == 0:
+        tempseq.sort()
+        i = 0
+        for i in range(len(tempseq)):
+            if tempseq[i] >= start:
+                break
+        templist = list(reversed(tempseq[:i]))
+        tempseq = tempseq[i:] + templist
+        for num in tempseq:
+            d = abs(nownum - num)
+            distance += d
+            nownum = num
+            print('被访问的下一个磁道号：{}  \t移动距离：{}'.format(num, d))
+        return distance / len(seq)
+    else:
+        tempseq.sort(reverse=True)
+        i = 0
+        for i in range(len(tempseq)):
+            if tempseq[i] <= start:
+                break
+        templist = list(reversed(tempseq[:i]))
+        tempseq = tempseq[i:] + templist
+        for num in tempseq:
+            d = abs(nownum - num)
+            distance += d
+            nownum = num
+            print('被访问的下一个磁道号：{}  \t移动距离：{}'.format(num, d))
+        return distance / len(seq)
+
+
+# 循环扫描算法
+def CSCAN(seq, start, drct):
+    tempseq = copy.deepcopy(seq)
+    distance = 0
+    nownum = start
+    if drct == 0:
+        tempseq.sort()
+        i = 0
+        for i in range(len(tempseq)):
+            if tempseq[i] >= start:
+                break
+        tempseq = tempseq[i:] + tempseq[:i]
+        for num in tempseq:
+            d = abs(nownum - num)
+            distance += d
+            nownum = num
+            print('被访问的下一个磁道号：{}  \t移动距离：{}'.format(num, d))
+        return distance / len(seq)
+    else:
+        tempseq.sort(reverse=True)
+        i = 0
+        for i in range(len(tempseq)):
+            if tempseq[i] <= start:
+                break
+        tempseq = tempseq[i:] + tempseq[:i]
+        for num in tempseq:
+            d = abs(nownum - num)
+            distance += d
+            nownum = num
+            print('被访问的下一个磁道号：{}  \t移动距离：{}'.format(num, d))
+        return distance / len(seq)
+
+
+if __name__ == '__main__':
+    diskseq = input('请输入需要访问的磁道号序列（以空格分隔）：')
+    # 55 58 39 18 90 160 150 38 184
+    diskseq = list(map(lambda x: int(x), diskseq.split()))
+    startnum = int(input('请输入当前磁头所在的磁道号：'))
+    direction = int(input('请输入当前磁头移动的方向（0表示自里向外，1表示自外向里）：'))
+    print('-----------------扫描算法--------------------')
+    average_SCAN = SCAN(diskseq, startnum, direction)
+    print('平均寻道长度：', average_SCAN)
+    print('--------------------------------------------')
+    print('-----------------循环扫描算法--------------------')
+    average_CSCAN = CSCAN(diskseq, startnum, direction)
+    print('平均寻道长度：', average_CSCAN)
+    print('------------------------------------------------')
+
+```
+
+### python other 
+
+```python
+def scan(diskSet, needle):
+    print(f"\nSCAN\n从{needle}号磁道开始")
+    print(f"被访问的下一个磁道号\t移动距离（磁道数）")
+    # 分割
+    diskListBefore = [x for x in diskSet if x > needle]
+    diskListAfter = [x for x in diskSet if x <= needle]
+    # 将列表排序 前升序 后降序
+    diskListBefore.sort()
+    diskListAfter.sort(reverse=True)
+    # 将后列表追加到前一列表
+    diskListBefore.extend(diskListAfter)
+    # 计算移动距离
+    distanceSum = 0
+    movdistan = []
+    # 计算访问磁道号时的移动距离
+    for item in diskListBefore:
+        # 算出移动距离并保存
+        movdistan.append(abs(needle - item))
+        distanceSum += movdistan[-1]
+        # 更新磁针位置
+        needle = item
+        print(f"\t{item}\t\t{movdistan[-1]}")
+    print(f"\n总道数：{distanceSum}\t平均寻道长度：{distanceSum / len(movdistan)}")
+
+
+def cscan(diskSet, needle):
+    print(f"\nCSCAN\n从{needle}号磁道开始")
+    print(f"被访问的下一个磁道号\t移动距离（磁道数）")
+    # 分割
+    diskListBefore = [x for x in diskSet if x > needle]
+    diskListAfter = [x for x in diskSet if x <= needle]
+    # 将列表排序 前升序 后降序
+    diskListBefore.sort()
+    diskListAfter.sort()
+    # 将后列表追加到前一列表
+    diskListBefore.extend(diskListAfter)
+    # 计算移动距离
+    distanceSum = 0
+    movdistan = []
+    # 计算访问磁道号时的移动距离
+    for item in diskListBefore:
+        # 算出移动距离并保存
+        movdistan.append(abs(needle - item))
+        distanceSum += movdistan[-1]
+        # 更新磁针位置
+        needle = item
+        print(f"\t{item}\t\t{movdistan[-1]}")
+    print(f"\n总道数：{distanceSum}\t平均寻道长度：{distanceSum / len(movdistan)}")
+
+
+if __name__ == '__main__':
+    track = [55, 58, 39, 18, 90, 160, 150, 38, 184]
+    scan(track, 100)
+    cscan(track, 100)
+
+```
+![image](磁盘调度二.assets/2661728-20220125104955645-1465403411.png)
