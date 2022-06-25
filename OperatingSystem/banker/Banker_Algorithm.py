@@ -1,7 +1,5 @@
 import copy
 
-print('E01914271 梁意')
-
 
 # 需要的是否小于可分配的
 def NeedLessWork(nd, wk):
