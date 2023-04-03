@@ -133,17 +133,11 @@ DWORD Signature;     // PE文件标识
 IMAGE_FILE_HEADER FileHeader;
 IMAGE_OPTIONAL_HEADER64 OptionalHeader;
 } IMAGE_NT_HEADERS64, *PIMAGE_NT_HEADERS64;
-```
-
-```
 typedef struct IMAGE_NT_HEADERS{
       DWORD Signature;
       IMAGE_FILE_HEADER FileHeader;
       IMAGE_OPTIONAL_HEADER32 OptionalHeader;
 }IMAGE_NT_HEADERS,*PIMAGE_NT_HEADERS; 
-```
-
-```c++
 #ifdef _WIN64
 typedef IMAGE_NT_HEADERS64 IMAGE_NT_HEADERS;
 typedef PIMAGE_NT_HEADERS64 PIMAGE_NT_HEADERS; #else
@@ -312,10 +306,10 @@ COFF 符号表的文件偏移位置。因为采用了较新的debug格式，所�
 - DataDirectory[16]: 数据目录表，由数个相同的IMAGE\_DATA\_DIRECTORY结构组成，指向输出表、输入表、资源块等数据。IMAGE\_DATA\_DIRECTORY的结构定义如下。
 
     ```c++
-    IMAGE_DATA_DIRECTORY	STRUCT
+    IMAGE_DATA_DIRECTORY    STRUCT
       VirtualAddress  DWORD ? ;数据块的起始RVA
-      Size 						DWORD ? ;数据块的长度
-    IMAGE DATA DIRECTORY	ENDS
+      Size                      DWORD ? ;数据块的长度
+    IMAGE DATA DIRECTORY    ENDS
     ```
 #### 数据目录表
 
@@ -532,9 +526,9 @@ Raw Offset和Rva Offset已知，物理地址偏移和内存地址偏移可相互
 IMAGE_ THUNK_ DATA STRUCT
   union ul
     Forwa rderString DWORD ? //指向一个转向者字符串的RVA
-    Function		 DWORD ? //被输入的函数的内存地址
-    Ordinal			 DWORD ? //被输入的API的序数值
-    AddressOfData	 DWORD ? //指向IMAGE_ IMPORT_ BY_ NAME
+    Function         DWORD ? //被输入的函数的内存地址
+    Ordinal          DWORD ? //被输入的API的序数值
+    AddressOfData    DWORD ? //指向IMAGE_ IMPORT_ BY_ NAME
   ends
 IMAGE_ THUNK_ DATA ENDS
 ```
@@ -597,7 +591,7 @@ push    0          ; MessageBoxA的第四个参数，即消息框的风格，这
 push    0x403000   ;第三个参数，消息框的标题字符串所在的地址。                   
 push    0x403007   ;第二个参数，消息框的内容字符串所在的地址。                     
 push    0          ;第一个参数，消息框所属窗口句柄，这里填0。                      
-call    40101A  	 ;调用MessageBoxA，实际是跳转到该函数的跳转指令所在地址。     
+call    40101A       ;调用MessageBoxA，实际是跳转到该函数的跳转指令所在地址。     
 push    0          ;ExitProcess函数的参数，程序退出码，传入0.                         
 call    401020     ;调用ExitProcess，实际是跳转到该函数的跳转指令所在地址。
 jmp   dword ptr [0x402080] ;跳转到MessageBoxA的真正地址处。
@@ -619,4 +613,4 @@ FF 25 88 20 40 00
 
 双击运行效果
 
-![image-20220401004151980](PECreate/image-20220401004151980.png)
+![image-20220401004151980](PECreate/image-20220401004151980.png) 
